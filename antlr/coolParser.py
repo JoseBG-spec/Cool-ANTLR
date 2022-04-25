@@ -1,4 +1,4 @@
-# Generated from f:\pepot\Documents\8vo Semestre\tc3048-202211\cool\antlr\cool.g4 by ANTLR 4.9.3
+# Generated from f:\pepot\Documents\8vo Semestre\CoolProject\Cool-ANTLR\antlr\cool.g4 by ANTLR 4.9.3
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -368,18 +368,31 @@ class coolParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
+
+        def getRuleIndex(self):
+            return coolParser.RULE_feature
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+
+    class MethodDeclContext(FeatureContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.FeatureContext
+            super().__init__(parser)
             self._formal = None # FormalContext
             self.params = list() # of FormalContexts
+            self.copyFrom(ctx)
 
         def ID(self):
             return self.getToken(coolParser.ID, 0)
-
         def TYPE(self):
             return self.getToken(coolParser.TYPE, 0)
-
         def expr(self):
             return self.getTypedRuleContext(coolParser.ExprContext,0)
-
 
         def formal(self, i:int=None):
             if i is None:
@@ -388,23 +401,48 @@ class coolParser ( Parser ):
                 return self.getTypedRuleContext(coolParser.FormalContext,i)
 
 
-        def getRuleIndex(self):
-            return coolParser.RULE_feature
-
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFeature" ):
-                listener.enterFeature(self)
+            if hasattr( listener, "enterMethodDecl" ):
+                listener.enterMethodDecl(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFeature" ):
-                listener.exitFeature(self)
+            if hasattr( listener, "exitMethodDecl" ):
+                listener.exitMethodDecl(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitFeature" ):
-                return visitor.visitFeature(self)
+            if hasattr( visitor, "visitMethodDecl" ):
+                return visitor.visitMethodDecl(self)
             else:
                 return visitor.visitChildren(self)
 
+
+    class MethodDecl2Context(FeatureContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.FeatureContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def ID(self):
+            return self.getToken(coolParser.ID, 0)
+        def TYPE(self):
+            return self.getToken(coolParser.TYPE, 0)
+        def expr(self):
+            return self.getTypedRuleContext(coolParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterMethodDecl2" ):
+                listener.enterMethodDecl2(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitMethodDecl2" ):
+                listener.exitMethodDecl2(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMethodDecl2" ):
+                return visitor.visitMethodDecl2(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -418,6 +456,7 @@ class coolParser ( Parser ):
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,6,self._ctx)
             if la_ == 1:
+                localctx = coolParser.MethodDeclContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 41
                 self.match(coolParser.ID)
@@ -460,6 +499,7 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 2:
+                localctx = coolParser.MethodDecl2Context(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 60
                 self.match(coolParser.ID)
@@ -549,15 +589,21 @@ class coolParser ( Parser ):
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
-            self._expr = None # ExprContext
-            self.params = list() # of ExprContexts
-
-        def primary(self):
-            return self.getTypedRuleContext(coolParser.PrimaryContext,0)
 
 
-        def ID(self):
-            return self.getToken(coolParser.ID, 0)
+        def getRuleIndex(self):
+            return coolParser.RULE_expr
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class GreaterEquContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
 
         def expr(self, i:int=None):
             if i is None:
@@ -566,49 +612,524 @@ class coolParser ( Parser ):
                 return self.getTypedRuleContext(coolParser.ExprContext,i)
 
 
-        def IF(self):
-            return self.getToken(coolParser.IF, 0)
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterGreaterEqu" ):
+                listener.enterGreaterEqu(self)
 
-        def THEN(self):
-            return self.getToken(coolParser.THEN, 0)
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitGreaterEqu" ):
+                listener.exitGreaterEqu(self)
 
-        def ELSE(self):
-            return self.getToken(coolParser.ELSE, 0)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitGreaterEqu" ):
+                return visitor.visitGreaterEqu(self)
+            else:
+                return visitor.visitChildren(self)
 
-        def FI(self):
-            return self.getToken(coolParser.FI, 0)
+
+    class NewTypeContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def NEW(self):
+            return self.getToken(coolParser.NEW, 0)
+        def TYPE(self):
+            return self.getToken(coolParser.TYPE, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterNewType" ):
+                listener.enterNewType(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitNewType" ):
+                listener.exitNewType(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitNewType" ):
+                return visitor.visitNewType(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class RestContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterRest" ):
+                listener.enterRest(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitRest" ):
+                listener.exitRest(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitRest" ):
+                return visitor.visitRest(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class WhileLoopContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
 
         def WHILE(self):
             return self.getToken(coolParser.WHILE, 0)
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
 
         def LOOP(self):
             return self.getToken(coolParser.LOOP, 0)
-
         def POOL(self):
             return self.getToken(coolParser.POOL, 0)
 
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterWhileLoop" ):
+                listener.enterWhileLoop(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitWhileLoop" ):
+                listener.exitWhileLoop(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitWhileLoop" ):
+                return visitor.visitWhileLoop(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class MultContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterMult" ):
+                listener.enterMult(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitMult" ):
+                listener.exitMult(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMult" ):
+                return visitor.visitMult(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class MethodContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self._expr = None # ExprContext
+            self.params = list() # of ExprContexts
+            self.copyFrom(ctx)
+
+        def ID(self):
+            return self.getToken(coolParser.ID, 0)
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterMethod" ):
+                listener.enterMethod(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitMethod" ):
+                listener.exitMethod(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMethod" ):
+                return visitor.visitMethod(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class IfThenElseContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def IF(self):
+            return self.getToken(coolParser.IF, 0)
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+        def THEN(self):
+            return self.getToken(coolParser.THEN, 0)
+        def ELSE(self):
+            return self.getToken(coolParser.ELSE, 0)
+        def FI(self):
+            return self.getToken(coolParser.FI, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIfThenElse" ):
+                listener.enterIfThenElse(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIfThenElse" ):
+                listener.exitIfThenElse(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitIfThenElse" ):
+                return visitor.visitIfThenElse(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class EquContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterEqu" ):
+                listener.enterEqu(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitEqu" ):
+                listener.exitEqu(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitEqu" ):
+                return visitor.visitEqu(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class SumContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterSum" ):
+                listener.enterSum(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitSum" ):
+                listener.exitSum(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitSum" ):
+                return visitor.visitSum(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class IsVoidExpContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def ISVOID(self):
+            return self.getToken(coolParser.ISVOID, 0)
+        def expr(self):
+            return self.getTypedRuleContext(coolParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIsVoidExp" ):
+                listener.enterIsVoidExp(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIsVoidExp" ):
+                listener.exitIsVoidExp(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitIsVoidExp" ):
+                return visitor.visitIsVoidExp(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class DivContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterDiv" ):
+                listener.enterDiv(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitDiv" ):
+                listener.exitDiv(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDiv" ):
+                return visitor.visitDiv(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class NotContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self):
+            return self.getTypedRuleContext(coolParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterNot" ):
+                listener.enterNot(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitNot" ):
+                listener.exitNot(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitNot" ):
+                return visitor.visitNot(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class PrimaryExpContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def primary(self):
+            return self.getTypedRuleContext(coolParser.PrimaryContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterPrimaryExp" ):
+                listener.enterPrimaryExp(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitPrimaryExp" ):
+                listener.exitPrimaryExp(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitPrimaryExp" ):
+                return visitor.visitPrimaryExp(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class AssocContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def ID(self):
+            return self.getToken(coolParser.ID, 0)
+        def expr(self):
+            return self.getTypedRuleContext(coolParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterAssoc" ):
+                listener.enterAssoc(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitAssoc" ):
+                listener.exitAssoc(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAssoc" ):
+                return visitor.visitAssoc(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class LetContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
         def LET(self):
             return self.getToken(coolParser.LET, 0)
-
         def let_decl(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(coolParser.Let_declContext)
             else:
                 return self.getTypedRuleContext(coolParser.Let_declContext,i)
 
-
         def IN(self):
             return self.getToken(coolParser.IN, 0)
+        def expr(self):
+            return self.getTypedRuleContext(coolParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterLet" ):
+                listener.enterLet(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitLet" ):
+                listener.exitLet(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitLet" ):
+                return visitor.visitLet(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class Exp2Context(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self):
+            return self.getTypedRuleContext(coolParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExp2" ):
+                listener.enterExp2(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExp2" ):
+                listener.exitExp2(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExp2" ):
+                return visitor.visitExp2(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExpContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExp" ):
+                listener.enterExp(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExp" ):
+                listener.exitExp(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExp" ):
+                return visitor.visitExp(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class GreaterContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterGreater" ):
+                listener.enterGreater(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitGreater" ):
+                listener.exitGreater(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitGreater" ):
+                return visitor.visitGreater(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class CaseContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
 
         def CASE(self):
             return self.getToken(coolParser.CASE, 0)
+        def expr(self):
+            return self.getTypedRuleContext(coolParser.ExprContext,0)
 
         def OF(self):
             return self.getToken(coolParser.OF, 0)
-
         def ESAC(self):
             return self.getToken(coolParser.ESAC, 0)
-
         def case_stat(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(coolParser.Case_statContext)
@@ -616,29 +1137,83 @@ class coolParser ( Parser ):
                 return self.getTypedRuleContext(coolParser.Case_statContext,i)
 
 
-        def NEW(self):
-            return self.getToken(coolParser.NEW, 0)
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterCase" ):
+                listener.enterCase(self)
 
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitCase" ):
+                listener.exitCase(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCase" ):
+                return visitor.visitCase(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class MethodCallContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self._expr = None # ExprContext
+            self.params = list() # of ExprContexts
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+        def ID(self):
+            return self.getToken(coolParser.ID, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterMethodCall" ):
+                listener.enterMethodCall(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitMethodCall" ):
+                listener.exitMethodCall(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMethodCall" ):
+                return visitor.visitMethodCall(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class MethodCall2Context(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a coolParser.ExprContext
+            super().__init__(parser)
+            self._expr = None # ExprContext
+            self.params = list() # of ExprContexts
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(coolParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(coolParser.ExprContext,i)
+
+        def ID(self):
+            return self.getToken(coolParser.ID, 0)
         def TYPE(self):
             return self.getToken(coolParser.TYPE, 0)
 
-        def ISVOID(self):
-            return self.getToken(coolParser.ISVOID, 0)
-
-        def getRuleIndex(self):
-            return coolParser.RULE_expr
-
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterExpr" ):
-                listener.enterExpr(self)
+            if hasattr( listener, "enterMethodCall2" ):
+                listener.enterMethodCall2(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitExpr" ):
-                listener.exitExpr(self)
+            if hasattr( listener, "exitMethodCall2" ):
+                listener.exitMethodCall2(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitExpr" ):
-                return visitor.visitExpr(self)
+            if hasattr( visitor, "visitMethodCall2" ):
+                return visitor.visitMethodCall2(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -658,11 +1233,18 @@ class coolParser ( Parser ):
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,12,self._ctx)
             if la_ == 1:
+                localctx = coolParser.PrimaryExpContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+
                 self.state = 74
                 self.primary()
                 pass
 
             elif la_ == 2:
+                localctx = coolParser.MethodContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 75
                 self.match(coolParser.ID)
                 self.state = 76
@@ -694,6 +1276,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 3:
+                localctx = coolParser.IfThenElseContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 88
                 self.match(coolParser.IF)
                 self.state = 89
@@ -711,6 +1296,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 4:
+                localctx = coolParser.WhileLoopContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 96
                 self.match(coolParser.WHILE)
                 self.state = 97
@@ -724,6 +1312,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 5:
+                localctx = coolParser.LetContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 102
                 self.match(coolParser.LET)
                 self.state = 103
@@ -747,6 +1338,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 6:
+                localctx = coolParser.CaseContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 114
                 self.match(coolParser.CASE)
                 self.state = 115
@@ -770,6 +1364,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 7:
+                localctx = coolParser.NewTypeContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 124
                 self.match(coolParser.NEW)
                 self.state = 125
@@ -777,6 +1374,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 8:
+                localctx = coolParser.ExpContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 126
                 self.match(coolParser.T__2)
                 self.state = 130 
@@ -798,6 +1398,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 9:
+                localctx = coolParser.Exp2Context(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 136
                 self.match(coolParser.T__11)
                 self.state = 137
@@ -805,6 +1408,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 10:
+                localctx = coolParser.IsVoidExpContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 138
                 self.match(coolParser.ISVOID)
                 self.state = 139
@@ -812,6 +1418,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 11:
+                localctx = coolParser.NotContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 140
                 self.match(coolParser.T__19)
                 self.state = 141
@@ -819,6 +1428,9 @@ class coolParser ( Parser ):
                 pass
 
             elif la_ == 12:
+                localctx = coolParser.AssocContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 142
                 self.match(coolParser.ID)
                 self.state = 143
@@ -841,7 +1453,7 @@ class coolParser ( Parser ):
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,18,self._ctx)
                     if la_ == 1:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.MultContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 147
                         if not self.precpred(self._ctx, 9):
@@ -854,7 +1466,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 2:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.DivContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 150
                         if not self.precpred(self._ctx, 8):
@@ -867,7 +1479,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 3:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.SumContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 153
                         if not self.precpred(self._ctx, 7):
@@ -880,7 +1492,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 4:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.RestContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 156
                         if not self.precpred(self._ctx, 6):
@@ -893,7 +1505,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 5:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.GreaterContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 159
                         if not self.precpred(self._ctx, 5):
@@ -906,7 +1518,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 6:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.GreaterEquContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 162
                         if not self.precpred(self._ctx, 4):
@@ -919,7 +1531,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 7:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.EquContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 165
                         if not self.precpred(self._ctx, 3):
@@ -932,7 +1544,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 8:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.MethodCallContext(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 168
                         if not self.precpred(self._ctx, 17):
@@ -971,7 +1583,7 @@ class coolParser ( Parser ):
                         pass
 
                     elif la_ == 9:
-                        localctx = coolParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = coolParser.MethodCall2Context(self, coolParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 183
                         if not self.precpred(self._ctx, 12):

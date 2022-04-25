@@ -1,4 +1,4 @@
-# Generated from f:\pepot\Documents\8vo Semestre\tc3048-202211\cool\antlr\cool.g4 by ANTLR 4.9.3
+# Generated from f:\pepot\Documents\8vo Semestre\CoolProject\Cool-ANTLR\antlr\cool.g4 by ANTLR 4.9.3
 from antlr4 import *
 from io import StringIO
 import sys

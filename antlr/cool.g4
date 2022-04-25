@@ -9,8 +9,8 @@ klass
     ;
 
 feature
-    : ID '(' ( params+=formal (',' params+=formal)* )? ')' ':' TYPE '{' expr '}'
-    | ID ':' TYPE ( '<-' expr )?
+    : ID '(' ( params+=formal (',' params+=formal)* )? ')' ':' TYPE '{' expr '}' #methodDecl
+    | ID ':' TYPE ( '<-' expr )? #methodDecl2
     ;
 
 formal
@@ -19,27 +19,27 @@ formal
 
 expr
     :
-    primary
-    | ID '(' ( params+=expr ( ',' params+=expr)* )? ')'
-    | IF expr THEN expr ELSE expr FI
-    | WHILE expr LOOP expr POOL
-    | expr '.' ID '(' ( params+=expr  ( ',' params+=expr)* )? ')'
-    | LET let_decl ( ',' let_decl )* IN expr
-    | CASE expr OF (case_stat)+ ESAC
-    | NEW TYPE
-    | '{' ( expr ';' )+ '}'
-    | expr ( '@' TYPE )? '.' ID '(' ( params+=expr  ( ',' params+=expr)* )? ')'
-    | '˜' expr
-    | ISVOID expr
-    | expr '*' expr
-    | expr '/' expr
-    | expr '+' expr
-    | expr '-' expr
-    | expr '<' expr
-    | expr '<=' expr
-    | expr '=' expr
-    | 'not' expr
-    | <assoc=right> ID '<-' expr
+    primary #primaryExp
+    | ID '(' ( params+=expr ( ',' params+=expr)* )? ')' #method
+    | IF expr THEN expr ELSE expr FI #ifThenElse
+    | WHILE expr LOOP expr POOL #whileLoop
+    | expr '.' ID '(' ( params+=expr  ( ',' params+=expr)* )? ')'  #methodCall
+    | LET let_decl ( ',' let_decl )* IN expr #let
+    | CASE expr OF (case_stat)+ ESAC #case
+    | NEW TYPE #newType
+    | '{' ( expr ';' )+ '}' #exp
+    | expr ( '@' TYPE )? '.' ID '(' ( params+=expr  ( ',' params+=expr)* )? ')' #methodCall2
+    | '˜' expr #exp2
+    | ISVOID expr #isVoidExp
+    | expr '*' expr #mult
+    | expr '/' expr #div
+    | expr '+' expr #sum
+    | expr '-' expr #rest
+    | expr '<' expr #greater
+    | expr '<=' expr #greaterEqu
+    | expr '=' expr #Equ
+    | 'not' expr #not
+    | <assoc=right> ID '<-' expr #assoc
     ;
 
 case_stat:

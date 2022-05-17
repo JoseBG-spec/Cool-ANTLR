@@ -17,4 +17,12 @@ def dummy():
     raise SystemExit(1)
 
 if __name__ == '__main__':
-    compile('semantic/input/anattributenamedself.cool')
+    #compile('resources/semantic/input/assignment.cool')
+    #compile('resources/semantic/input/basic.cool')
+    #compile('resources/semantic/input/basicclassestree.cool')
+    ##compile('resources/semantic/input/cells.cool')
+    #compile('resources/semantic/input/classes.cool') Check how to see fi there is no main
+    #compile('resources/semantic/input/compare.cool')
+    #compile('resources/semantic/input/comparisons.cool')  Check how to see fi there is no main
+    #compile('resources/semantic/input/cycleinmethods.cool')
+    compile('resources/semantic/input/dispatch.cool')

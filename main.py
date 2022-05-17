@@ -26,3 +26,5 @@ if __name__ == '__main__':
     #compile('resources/semantic/input/comparisons.cool')  Check how to see fi there is no main
     #compile('resources/semantic/input/cycleinmethods.cool')
     compile('resources/semantic/input/dispatch.cool')
+    #Forwards inherits needs to check all classes before
+    #WTF hairyScary

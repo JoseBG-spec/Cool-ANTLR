@@ -211,6 +211,7 @@ class dummyListener(coolListener):
                     if ctx.ID().getText() in self.methodDic.keys():
                         print(ctx.getText())
                 elif ctx.INTEGER() is None:
+                    print("check",ctx.getText())
                     self.operation = ''
                     self.badArith = True
 
@@ -306,15 +307,18 @@ class dummyListener(coolListener):
         if self.klassInher[self.klassName] is not empty:
             for methods in self.klassInher[self.klassName].split(','):
                 if methods != '' and methods not in self.predefined:
+                    print(ctx.ID().getText(),methods)
                     if ctx.ID().getText() in self.klassDic[methods]:
                         raise attroverride()
         if ctx.ID().getText() == "self":
             self.anAttributeNamedSelf = True
         elif(ctx.expr() is not None):
-            if ctx.expr().getText() not in self.klassDic[self.klassName].split(",") and "new" not in ctx.expr().getText() and "" not in ctx.expr().getText():
-                print(ctx.expr().getText(),self.klassDic[self.klassName].split(","))
+            if ctx.expr().getText() not in self.klassDic[self.klassName].split(",") and "new" not in ctx.expr().getText() and len(ctx.expr().getText()) != 0 and '""' not in ctx.expr().getText():
+                print(ctx.expr().getText(),self.klassDic[self.klassName].split(","),len(ctx.expr().getText()),'""')
                 if(ctx.expr().getText() == "self"):
                     self.selfAssignment = True
+                elif(ctx.expr().getText() == "true"):
+                    print("true")
                 elif(not ctx.expr().getText().isnumeric()):
                     raise attrbadinit()
                 
@@ -400,8 +404,9 @@ class dummyListener(coolListener):
                     if(self.methodDic[self.assocID].split(',')[0] != ctx.TYPE().getText()):
                         raise assignnoconform()
             else:
-                print('SELF',ctx.TYPE().getText(),self.MethDeclType)
-                if ctx.TYPE().getText() != self.MethDeclType:
+                print('SELF',ctx.TYPE().getText(),self.MethDeclType,self.klassDic.keys())
+                if ctx.TYPE().getText() != self.MethDeclType  :
+                    # and ctx.TYPE().getText() not in self.klassDic.keys() and ctx.TYPE().getText() not in
                     print(ctx.TYPE().getText(),self.MethDeclType,ctx.getText())
                     raise selftypebadreturn()
 
@@ -411,7 +416,8 @@ class dummyListener(coolListener):
                 raise badwhilecond()
     
     def enterMethod(self, ctx: coolParser.MethodContext):
-        print('Methodddddd',ctx.params[0].getText(),self.tempFormal)
+        if(ctx.params):
+            print('Methodddddd',ctx.params[0].getText(),self.tempFormal)
         if self.tempFormal:
             if self.tempFormal[0] == "Int":
                 if not ctx.params[0].getText().isnumeric():

@@ -1,5 +1,4 @@
 from asyncio.windows_events import NULL
-from types import NoneType
 from xmlrpc.client import Boolean
 
 from pyparsing import empty

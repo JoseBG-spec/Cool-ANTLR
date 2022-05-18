@@ -6,6 +6,9 @@ from main import compile
 def test_assignment():
     compile('resources/semantic/input/assignment.cool')
 
+def test_classes():
+    compile('resources/semantic/input/classes.cool')
+
 def test_basic():
     compile('resources/semantic/input/basic.cool')
 

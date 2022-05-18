@@ -3,14 +3,21 @@ from antlr.coolLexer import coolLexer
 from antlr.coolParser import coolParser
 
 from listeners.dummy import dummyListener
+from listeners.listenerTwo import listenerTwo
 
 def compile(file):
     parser = coolParser(CommonTokenStream(coolLexer(FileStream(file))))
     tree = parser.program()
 
     walker = ParseTreeWalker()
+    dummy= dummyListener()
+    ltwo= listenerTwo()
+
+    #walker.walk(ltwo, tree)
+    #ltwo.printObj()
     
     walker.walk(dummyListener(), tree)
+    dummy.printObj()
 
 
 def dummy():

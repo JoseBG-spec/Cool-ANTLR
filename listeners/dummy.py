@@ -180,23 +180,7 @@ class dummyListener(coolListener):
         #print("DicMethod",self.methodDic)
         self.methodDic = {}
 
-    def enterLet_decl(self, ctx: coolParser.Let_declContext):
-        print('let',ctx.TYPE().getText())
-        self.letCall = ctx.TYPE().getText()
-        self.letID = ctx.ID().getText()
-        if (ctx.ID().getText() == 'self'):
-            self.letSelf = True
-        if ctx.expr() is not None:
-            print('let2',ctx.expr().getText())
-            if "new" in ctx.expr().getText():
-                print('let3',self.klassInher.keys())
-                if  ctx.expr().getText().split('new')[1] not in self.klassInher.keys():
-                    if ctx.expr().getText().split('new')[1] != self.letCall:
-                        raise letbadinit()
-    
-    def exitLet_decl(self, ctx: coolParser.Let_declContext):
-        if (self.letSelf):
-            raise letself()
+
         
 
     def enterExpr(self, ctx: coolParser.ExprContext): 
@@ -299,49 +283,18 @@ class dummyListener(coolListener):
     def exitMethodCall(self, ctx: coolParser.MethodCallContext):
         if self.badDispatch:
             raise baddispatch()
-    
 
-    def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
-        print('EnterMethDecl',ctx.getText())
-        #if self.klassInher[self.klassName] is not empty:
-        #for methods in self.klassInher[self.klassName].split(',')[1:]:
-        #OverridingMethod4
-        print('EnterMethDeclMethsForm',self.methodFormal.keys())
-        if ctx.ID().getText() in self.methodFormal.keys():
-            print('Casio',self.methodFormal[ctx.ID().getText()],self.methodFormal[ctx.ID().getText()].split('|'),len(ctx.formal()))
-            if len(ctx.formal()) == len(self.methodFormal[ctx.ID().getText()].split('|'))-1:
-                for tempFormalID in ctx.formal():
-                    for l in range(len(self.methodFormal[ctx.ID().getText()].split('|'))):
-                        if tempFormalID.getText().split(':')[0] in self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[0]:
-                            if tempFormalID.getText().split(':')[1] != self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1]:
-                                print('Game',tempFormalID.getText().split(':')[1],self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1])
-                                raise overridingmethod4()
-            else:
-                raise signaturechange()
-            
+    def enterMethodCall2(self, ctx: coolParser.MethodCall2Context):
+        print('enterMethodCall2',ctx.getText(),ctx.expr()[0].getText())
+        if "new" in ctx.expr()[0].getText():
+            if ctx.expr()[0].getText().split('new')[1].split(')')[0] not in self.klassInher[ctx.TYPE().getText()].split(','):
+                raise trickyatdispatch2()
+        else:
+            print("badstaticdispatch?", ctx.ID().getText(), self.klassInher[self.klassName].split(','))
+            if ctx.ID().getText() not in self.klassInher[self.klassName].split(','):
+                raise badstaticdispatch()
 
-        self.methodFormal[ctx.ID().getText()] = ""
-        for x in ctx.formal():
-            self.tempFormal.append(x.getText().split(':')[1])
-            self.tempFormalID.append(x.getText().split(':')[0])
-            self.methodFormal[ctx.ID().getText()] += x.getText() + '|'
-        self.klassDic[self.klassName] += ctx.ID().getText() + ","
-        self.methodDic[ctx.ID().getText()] = ""
-        self.methodDic[ctx.ID().getText()] += ctx.TYPE().getText() + ","
-        
-        self.MethDeclType = ctx.TYPE().getText()        
-        #DupFormals
-        if len(self.tempFormalID) != len(set(self.tempFormalID)):
-            print("Duplicates",len(self.tempFormalID), len(set(self.tempFormalID)))
-            raise dupformals()
-
-        #raise badargs1()---------------------------------------
-        if ctx.ID().getText() in self.methodCalls.keys():
-            print('OJO',len(ctx.formal()),len(self.methodCalls[ctx.ID().getText()].split(',')))
-            if len(ctx.formal()) == len(self.methodCalls[ctx.ID().getText()].split(','))-1:
-                for x in range(len(ctx.formal())):                    
-                    if ctx.formal()[x].getText().split(':')[1] != self.methodCalls[ctx.ID().getText()].split(',')[x]:
-                        raise badargs1()   
+  
 
     def exitMethodDecl(self, ctx: coolParser.MethodDeclContext):
         if (self.anAttributeNamedSelf):
@@ -462,36 +415,8 @@ class dummyListener(coolListener):
         if ctx.expr(0).getText() == self.tempFormalID:
             if self.formalCh != 'Int':
                 raise badwhilecond()
-    
-    def enterMethod(self, ctx: coolParser.MethodContext):
-        if(ctx.params):
-            print('Methodddddd',ctx.params[0].getText(),self.tempFormal)
-        if self.tempFormal:
-            if self.tempFormal[0] == "Int":
-                if not ctx.params[0].getText().isnumeric():
-                    raise badmethodcallsitself()
-    
-    def enterMethodCall2(self, ctx: coolParser.MethodCall2Context):
-        print('enterMethodCall2',ctx.getText(),ctx.expr()[0].getText())
-        if "new" in ctx.expr()[0].getText():
-            if ctx.expr()[0].getText().split('new')[1].split(')')[0] not in self.klassInher[ctx.TYPE().getText()].split(','):
-                raise trickyatdispatch2()
-        else:
-            if ctx.ID().getText() not in self.klassInher[self.klassName].split(','):
-                raise badstaticdispatch()
-                
 
-    def enterIfThenElse(self, ctx: coolParser.IfThenElseContext):
-        print("enterIfThenElse",ctx.expr()[1].getText())
-        for expr in ctx.expr()[1:]:
-            print('ThenElse',expr.getText(), self.methodDic.keys())
-            if expr.getText() in self.methodDic.keys():
-                if self.methodDic[expr.getText()][0] in self.klassInher.keys():
-                    if self.MethDeclType != "Object":
-                        if self.MethDeclType not in self.klassInher[self.methodDic[expr.getText()][0]]:
-                            raise lubtest()
-            else:
-                print('NopeIF')
+
 
     def printObj(self):
         print("***From Dummy, print obj_________________________________")

@@ -9,7 +9,7 @@ from antlr.coolParser import coolParser
 class listenerTwo(coolListener):
     def __init__(self):
         self.predefined = ['Object','Int','String','Boolean','SELF_TYPE','IO','Bool']
-        self.main                   = True
+        self.main                   = False
         self.redefineInt            = False
         self.anAttributeNamedSelf   = False
         self.inheritsBool           = False
@@ -160,9 +160,6 @@ class listenerTwo(coolListener):
                     print("check",ctx.getText())
                     self.operation = ''
                     self.badArith = True
-    def exitPrimary(self, ctx: coolParser.PrimaryContext):
-        if(self.badArith):
-            raise badarith()
 
     def enterMethodDecl2(self, ctx: coolParser.MethodDecl2Context):
         print('Buenas7',ctx.ID().getText())

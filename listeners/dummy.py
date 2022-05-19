@@ -130,13 +130,38 @@ class dummyListener(coolListener):
                     self.missClass = True
             #self.inherits[self.klassNo] = ctx.TYPE(1).getText()
     """
+    def enterKlass(self, ctx:coolParser.KlassContext):     
+        if ctx.TYPE(0).getText() == 'Main':
+            self.main = True
+        if ctx.TYPE(0).getText() == 'Int':
+            self.redefineInt = True
+        if ctx.TYPE(0).getText() == 'Object':
+            self.redefinedObject = True
+        if ctx.TYPE(0).getText() == 'SELF_TYPE':
+            self.selfTypeRedeclared = True
+
+        if (ctx.TYPE(1) is not None):
+            if ctx.TYPE(1).getText() not in self.klassDic.keys():
+                if ctx.TYPE(1).getText() == 'Bool':
+                    self.inheritsBool = True
+                if ctx.TYPE(1).getText() == 'SELF_TYPE':
+                    self.inheritsSelfType = True
+                if ctx.TYPE(1).getText() == 'String':
+                    self.inheritsString = True
+                elif(ctx.TYPE(1).getText() not in self.predefined):
+                    self.missClass = True
+
+
+
+        #Esto rompe todos los tests
+        #if ctx.TYPE(0).getText() in self.klassDic.keys():
+            #raise redefinedclass()
 
     def exitKlass(self, ctx:coolParser.KlassContext):
         if (not self.main):
             raise nomain()
         if (self.redefineInt):
             raise badredefineint()
-        #print(self.inheritsBool)
         if (self.inheritsBool):
             raise inheritsbool()
         if (self.inheritsSelfType):
@@ -198,12 +223,11 @@ class dummyListener(coolListener):
             #raise badequalitytest()
     
     def enterFormal(self, ctx: coolParser.FormalContext):
-        print('gg', ctx.ID().getText(),ctx.TYPE().getText())
-        self.formalCh = ctx.TYPE().getText()
-        self.formalID = ctx.ID().getText()
+
+        print(ctx.ID().getText())
+
         if (ctx.ID().getText()=='self'):
             self.selfInformalParameter = True
-            #print(ctx.ID().getText())
         if (ctx.TYPE().getText()=='SELF_TYPE'):
             self.selfTypeParameterPosition = True
     
@@ -213,7 +237,7 @@ class dummyListener(coolListener):
         if(self.selfTypeParameterPosition):
             raise selftypeparameterposition()
 
-    """
+
     def enterPrimary(self, ctx: coolParser.PrimaryContext):
         if ctx.ID() is not None:
             print('Buenas8',ctx.ID().getText(),self.klassDic[self.klassName].split(","),self.klassName);
@@ -229,6 +253,7 @@ class dummyListener(coolListener):
                     if self.letExit:
                         self.letExit = False
                         raise outofscope()
+                        
         if self.operation is not None:
             if self.operation == 'equ':
                 if ctx.STRING() is not None:
@@ -256,21 +281,13 @@ class dummyListener(coolListener):
                     print("check",ctx.getText())
                     self.operation = ''
                     self.badArith = True
+
     def exitPrimary(self, ctx: coolParser.PrimaryContext):
         if(self.badArith):
             raise badarith()
-    """
-            
-    """
+
+
     def enterMethodCall(self, ctx: coolParser.MethodCallContext):
-        self.methodCalls[ctx.ID().getText()] = ''
-        for parms in ctx.params:
-            if parms.getText() == "self":
-                self.methodCalls[ctx.ID().getText()] += self.klassName + ','
-            elif parms.getText().isnumeric():
-                self.methodCalls[ctx.ID().getText()] += "Int" + ','
-            else:
-                self.methodCalls[ctx.ID().getText()] += parms.getText() + ','
         print("Method Call",self.methodCalls.keys(),self.methodCalls[ctx.ID().getText()])
         if self.letCall in self.klassDic.keys():
             if ctx.ID().getText() not in self.klassDic[self.letCall].split(","):
@@ -278,7 +295,7 @@ class dummyListener(coolListener):
         if self.formalCh == 'Int':
             if ctx.ID().getText() == "length":
                 raise badwhilebody()
-    """ 
+
     def exitMethodCall(self, ctx: coolParser.MethodCallContext):
         if self.badDispatch:
             raise baddispatch()
@@ -317,6 +334,7 @@ class dummyListener(coolListener):
         if len(self.tempFormalID) != len(set(self.tempFormalID)):
             print("Duplicates",len(self.tempFormalID), len(set(self.tempFormalID)))
             raise dupformals()
+
         #raise badargs1()---------------------------------------
         if ctx.ID().getText() in self.methodCalls.keys():
             print('OJO',len(ctx.formal()),len(self.methodCalls[ctx.ID().getText()].split(',')))
@@ -417,25 +435,31 @@ class dummyListener(coolListener):
     def enterNewType(self, ctx: coolParser.NewTypeContext):
         if self.MethDeclType is not None:
             print('MethDeclType',self.MethDeclType)
+
             if self.MethDeclType == 'Int':
                 if ctx.TYPE().getText() == 0 or ctx.TYPE().getText() == 1:
                     print('Ok')
+
             if self.MethDeclType == 'String':
                 print('New String')
+
             if self.MethDeclType == 'Object':
                 print('New Object',self.MethDeclType,ctx.TYPE().getText(),self.assocID,self.methodDic.keys())
                 if(self.assocID in self.methodDic.keys()):
                     if(self.methodDic[self.assocID].split(',')[0] != ctx.TYPE().getText()):
                         raise assignnoconform()
-            else:
-                print('SELF',ctx.TYPE().getText(),self.MethDeclType,self.klassDic.keys())
-                if ctx.TYPE().getText() != self.MethDeclType  :
-                    # and ctx.TYPE().getText() not in self.klassDic.keys() and ctx.TYPE().getText() not in
-                    print(ctx.TYPE().getText(),self.MethDeclType,ctx.getText())
-                    raise selftypebadreturn()
+
+            if self.MethDeclType == 'SELF_TYPE':
+                raise selftypebadreturn()
+
+            elif ctx.TYPE().getText() != self.MethDeclType:
+                print('SELF', ctx.TYPE().getText(), self.MethDeclType, self.klassDic.keys())
+                # and ctx.TYPE().getText() not in self.klassDic.keys() and ctx.TYPE().getText() not in
+                print(ctx.TYPE().getText(),self.MethDeclType,ctx.getText())
+                #raise selftypebadreturn()
 
     def enterWhileLoop(self, ctx: coolParser.WhileLoopContext):
-        if ctx.expr(0).getText() == self.formalID:
+        if ctx.expr(0).getText() == self.tempFormalID:
             if self.formalCh != 'Int':
                 raise badwhilecond()
     

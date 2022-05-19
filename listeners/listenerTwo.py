@@ -23,6 +23,7 @@ class listenerTwo(coolListener):
         self.selfTypeRedeclared = False
         self.operation = ''
         self.badArith = False
+        
         self.klassDic = {}
         self.methodDic = {}
         self.klassInher = {}
@@ -96,9 +97,9 @@ class listenerTwo(coolListener):
         if (self.missClass):
             raise missingclass()
         
-        print("Class Name",self.klassName,"Classes:", self.klassDic[self.klassName])
-        print("Class Name",self.klassName,"Inherits:", self.klassInher[self.klassName])
-        print("DicMethod",self.methodDic)
+        #print("Class Name",self.klassName,"Classes:", self.klassDic[self.klassName])
+        #print("Class Name",self.klassName,"Inherits:", self.klassInher[self.klassName])
+        #print("DicMethod",self.methodDic)
         self.methodDic = {}
     
     def enterMethodCall(self, ctx: coolParser.MethodCallContext):
@@ -137,11 +138,90 @@ class listenerTwo(coolListener):
 
         print("method formal", self.methodFormal)
     
+    def exitMethodCall(self, ctx: coolParser.MethodCallContext):
+        if self.badDispatch:
+            raise baddispatch()  
+    
+    def enterPrimary(self, ctx: coolParser.PrimaryContext):
+        if ctx.ID() is not None:
+            print('Buenas8',ctx.ID().getText(),self.klassDic[self.klassName].split(","),self.klassName);
+            if self.methDeclY:
+                if ctx.ID().getText() == "self":
+                    raise selfassignment()
+                
+                self.methDeclY = False
+            
+        if self.letID is not None:
+            if ctx.ID() is not None:
+                if ctx.ID().getText() == self.letID:
+                    if self.letExit:
+                        self.letExit = False
+                        raise outofscope()
+        if self.operation is not None:
+            if self.operation == 'equ':
+                if ctx.STRING() is not None:
+                    print('nn',ctx.STRING().getText())
+                    self.strs = 'String'
+                    self.operation = ''
+
+                elif ctx.FALSE() is not None:
+                    print('nn False')
+                    self.strs = 'Boolean'
+                    self.operation = ''
+
+                elif ctx.TRUE() is not None:
+                    print('nn True')
+                    self.strs = 'Boolean'
+                    self.operation = ''
+        
+        if self.operation is not None:
+            #print('Gamer',ctx.getText());
+            if self.operation == 'sum':
+                if ctx.ID() is not None:
+                    if ctx.ID().getText() in self.methodDic.keys():
+                        print(ctx.getText())
+                elif ctx.INTEGER() is None:
+                    print("check",ctx.getText())
+                    self.operation = ''
+                    self.badArith = True
+
+    def enterMethodDecl2(self, ctx: coolParser.MethodDecl2Context):
+        print('Buenas7',ctx.ID().getText())
+        self.methodDic[ctx.ID().getText()] = ""
+        if self.klassInher[self.klassName] is not empty:
+            for methods in self.klassInher[self.klassName].split(','):
+                if methods != '' and methods not in self.predefined:
+                    print(ctx.ID().getText(),methods)
+                    if ctx.ID().getText() in self.klassDic[methods]:
+                        raise attroverride()
+        if ctx.ID().getText() == "self":
+            self.anAttributeNamedSelf = True
+        elif(ctx.expr() is not None):
+            if ctx.expr().getText() not in self.klassDic[self.klassName].split(",") and "new" not in ctx.expr().getText() and len(ctx.expr().getText()) != 0 and '""' not in ctx.expr().getText():
+                print(ctx.expr().getText(),self.klassDic[self.klassName].split(","),len(ctx.expr().getText()),'""')
+                if(ctx.expr().getText() == "self"):
+                    self.selfAssignment = True
+                elif(ctx.expr().getText() == "true"):
+                    print("true")
+                elif(not ctx.expr().getText().isnumeric()):
+                    raise attrbadinit()
+                
+
+        self.MethDeclType = ctx.TYPE().getText()
+        self.klassDic[self.klassName] += ctx.ID().getText() + ","
+        self.methodDic[ctx.ID().getText()] += ctx.TYPE().getText() + ","
+        self.methDeclY = True
+
+    def exitMethodDecl2(self, ctx: coolParser.MethodDecl2Context):
+        if (self.anAttributeNamedSelf):
+            raise anattributenamedself()
+    
     def printObj(self):
-        print("_________________________________")
-        print("FINAL klass Dic",        self.klassDic)
-        print("FINAL method Dic",       self.methodDic)
-        print("FINAL klass inher",      self.klassInher)
-        print("FINAL klass Method",     self.methodCalls)
+        print("From Listener two, print obj_________________________________")
+        print("FINAL klass Dic",            self.klassDic)
+        print("FINAL method Dic",           self.methodDic)
+        print("FINAL klass inher",          self.klassInher)
+        print("FINAL klass Method Calls",   self.methodCalls)
+        print("FINAL klass Method Formal",  self.methodFormal)
 
 

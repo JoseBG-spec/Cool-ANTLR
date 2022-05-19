@@ -10,13 +10,19 @@ def compile(file):
     tree = parser.program()
 
     walker = ParseTreeWalker()
-    dummy= dummyListener()
-    ltwo= listenerTwo()
 
-    #walker.walk(ltwo, tree)
-    #ltwo.printObj()
+    ltwo= listenerTwo()
+    walker.walk(ltwo, tree)
+    ltwo.printObj()
+
+    dummy= dummyListener(ltwo.klassDic,
+                        ltwo.methodDic,
+                        ltwo.klassInher,
+                        ltwo.methodCalls,
+                        ltwo.methodFormal,
+    )
     
-    walker.walk(dummyListener(), tree)
+    walker.walk(dummy, tree)
     dummy.printObj()
 
 

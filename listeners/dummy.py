@@ -8,7 +8,7 @@ from antlr.coolParser import coolParser
 
 class dummyListener(coolListener):
 
-    def __init__(self):
+    def __init__(self, klassDic, methodDic, klassInher, methodCalls, methodFormal):
         self.predefined = ['Object','Int','String','Boolean','SELF_TYPE','IO','Bool']
         self.main = True
         self.redefineInt = False
@@ -24,13 +24,14 @@ class dummyListener(coolListener):
         self.selfTypeRedeclared = False
         self.operation = ''
         self.badArith = False
-        self.klassDic = {}
-        self.methodDic = {}
-        self.klassInher = {}
-        self.methodCalls = {}
-        self.methodFormal = {}
-        self.klassName = ''
 
+        self.klassDic       = klassDic
+        self.methodDic      = methodDic
+        self.klassInher     = klassInher
+        self.methodCalls    = methodCalls
+        self.methodFormal   = methodFormal
+
+        self.klassName = ''
         self.letCall= ''
         self.letID = ''
         self.letExit = False
@@ -49,8 +50,16 @@ class dummyListener(coolListener):
         self.tempFormal = []
         self.tempFormalID =[]
 
-        
+        print("INIT DUMMY_________________________________")
+        print("INIT klass Dic",            self.klassDic)
+        print("INIT method Dic",           self.methodDic)
+        print("INIT klass inher",          self.klassInher)
+        print("INIT klass Method Calls",   self.methodCalls)
+        print("INIT klass Method Formal",  self.methodFormal)
+        print("INIT DUMMY_________________________________")
 
+        
+    """ 
 
     def enterKlass(self, ctx:coolParser.KlassContext):
         if ctx.TYPE(0).getText() in self.klassDic.keys():
@@ -102,13 +111,13 @@ class dummyListener(coolListener):
         if (self.missClass):
             raise missingclass()
         
-        print("Buenas3",self.klassName,"Classes:", self.klassDic[self.klassName])
-        print("Buenas4",self.klassName,"Inherits:", self.klassInher[self.klassName])
-        print("DicMethod",self.methodDic)
+        #print("Buenas3",self.klassName,"Classes:", self.klassDic[self.klassName])
+        #print("Buenas4",self.klassName,"Inherits:", self.klassInher[self.klassName])
+        #print("DicMethod",self.methodDic)
         self.methodDic = {}
         #print("Buenas4", self.klassDic.keys())
         #self.methodNo = 0
-
+    """
 
     def enterLet_decl(self, ctx: coolParser.Let_declContext):
         print('let',ctx.TYPE().getText())
@@ -171,6 +180,7 @@ class dummyListener(coolListener):
         if(self.selfTypeParameterPosition):
             raise selftypeparameterposition()
 
+    """
     def enterPrimary(self, ctx: coolParser.PrimaryContext):
         if ctx.ID() is not None:
             print('Buenas8',ctx.ID().getText(),self.klassDic[self.klassName].split(","),self.klassName);
@@ -213,14 +223,14 @@ class dummyListener(coolListener):
                     print("check",ctx.getText())
                     self.operation = ''
                     self.badArith = True
-
+    """
                 
     
     def exitPrimary(self, ctx: coolParser.PrimaryContext):
         if(self.badArith):
             raise badarith()
             
-    
+    """
     def enterMethodCall(self, ctx: coolParser.MethodCallContext):
         self.methodCalls[ctx.ID().getText()] = ''
         for parms in ctx.params:
@@ -237,12 +247,13 @@ class dummyListener(coolListener):
         if self.formalCh == 'Int':
             if ctx.ID().getText() == "length":
                 raise badwhilebody()
-        
+    """    
 
     def exitMethodCall(self, ctx: coolParser.MethodCallContext):
         if self.badDispatch:
             raise baddispatch()        
     
+    """
     def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
         print('EnterMethDecl',ctx.getText())
         #if self.klassInher[self.klassName] is not empty:
@@ -282,10 +293,8 @@ class dummyListener(coolListener):
             if len(ctx.formal()) == len(self.methodCalls[ctx.ID().getText()].split(','))-1:
                 for x in range(len(ctx.formal())):                    
                     if ctx.formal()[x].getText().split(':')[1] != self.methodCalls[ctx.ID().getText()].split(',')[x]:
-                        raise badargs1()
-                
-        
-             
+                        raise badargs1()   
+    """
     
     def exitMethodDecl(self, ctx: coolParser.MethodDeclContext):
         if (self.anAttributeNamedSelf):
@@ -299,7 +308,7 @@ class dummyListener(coolListener):
 
         
         
-    
+    """
     def enterMethodDecl2(self, ctx: coolParser.MethodDecl2Context):
         print('Buenas7',ctx.ID().getText())
         self.methodDic[ctx.ID().getText()] = ""
@@ -330,7 +339,7 @@ class dummyListener(coolListener):
     def exitMethodDecl2(self, ctx: coolParser.MethodDecl2Context):
         if (self.anAttributeNamedSelf):
             raise anattributenamedself()
-        
+    """      
 
     def enterAssoc(self, ctx: coolParser.AssocContext):
         print('Assoc',ctx.getText(),self.methodDic.keys())
@@ -444,14 +453,11 @@ class dummyListener(coolListener):
             else:
                 print('NopeIF')
 
-        
-        
-
-
-
-
-
-   
-
-    
+    def printObj(self):
+        print("From Dummy_________________________________")
+        print("FINAL klass Dic",            self.klassDic)
+        print("FINAL method Dic",           self.methodDic)
+        print("FINAL klass inher",          self.klassInher)
+        print("FINAL klass Method Calls",   self.methodCalls)
+        print("FINAL klass Method Formal",  self.methodFormal)
 

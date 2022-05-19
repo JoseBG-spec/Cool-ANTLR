@@ -9,45 +9,46 @@ from antlr.coolParser import coolParser
 class listenerTwo(coolListener):
     def __init__(self):
         self.predefined = ['Object','Int','String','Boolean','SELF_TYPE','IO','Bool']
-        self.main = True
-        self.redefineInt = False
-        self.anAttributeNamedSelf = False
-        self.inheritsBool = False
-        self.inheritsSelfType = False
-        self.inheritsString = False
-        self.letSelf = False
-        self.redefinedObject = False
-        self.selfAssignment = False
-        self.selfInformalParameter = False
-        self.selfTypeParameterPosition = False
-        self.selfTypeRedeclared = False
-        self.operation = ''
-        self.badArith = False
+        self.main                   = True
+        self.redefineInt            = False
+        self.anAttributeNamedSelf   = False
+        self.inheritsBool           = False
+        self.inheritsSelfType       = False
+        self.inheritsString         = False
+        self.letSelf                = False
+        self.redefinedObject        = False
+        self.selfAssignment         = False
+        self.selfInformalParameter  = False
+        self.selfTypeParameterPosition  = False
+        self.selfTypeRedeclared     = False
+        self.operation              = ''
+        self.badArith               = False
         
-        self.klassDic = {}
-        self.methodDic = {}
-        self.klassInher = {}
-        self.methodCalls = {}
-        self.methodFormal = {}
-        self.klassName = ''
+        self.klassDic               = {}
+        self.methodDic              = {}
+        self.klassInher             = {}
+        self.methodCalls            = {}
+        self.methodFormal           = {}
+        self.klassName              = ''
 
-        self.letCall= ''
-        self.letID = ''
-        self.letExit = False
-        self.strs = ''
-        self.MethDeclType = ''
-        self.caseSt = []
-        self.assocID = ''
+        self.klassName              = ''
+        self.letCall                = ''
+        self.letID                  = ''
+        self.letExit                = False
+        self.strs                   = ''
+        self.MethDeclType           = ''
+        self.caseSt                 = []
+        self.assocID                = ''
         
 
-        self.formalCh = ''
-        self.badDispatch = False
-        self.badEqualityTest1 = False
-        self.badEqualityTest2 = False
-        self.missClass = False
-        self.methDeclY = False
-        self.tempFormal = []
-        self.tempFormalID =[]
+        self.formalCh               = ''
+        self.badDispatch            = False
+        self.badEqualityTest1       = False
+        self.badEqualityTest2       = False
+        self.missClass              = False
+        self.methDeclY              = False
+        self.tempFormal             = []
+        self.tempFormalID           = []
 
     def enterKlass(self, ctx:coolParser.KlassContext):
         if ctx.TYPE(0).getText() in self.klassDic.keys():
@@ -77,30 +78,8 @@ class listenerTwo(coolListener):
                 elif(ctx.TYPE(1).getText() not in self.predefined):
                     self.missClass = True
             #self.inherits[self.klassNo] = ctx.TYPE(1).getText()
-    
-    def exitKlass(self, ctx:coolParser.KlassContext):
-        if (not self.main):
-            raise nomain()
-        if (self.redefineInt):
-            raise badredefineint()
-        #print(self.inheritsBool)
-        if (self.inheritsBool):
-            raise inheritsbool()
-        if (self.inheritsSelfType):
-            raise inheritsselftype()
-        if (self.inheritsString):
-            raise inheritsstring()
-        if (self.redefinedObject):
-            raise redefinedobject()
-        if (self.selfTypeRedeclared):
-            raise selftyperedeclared()
-        if (self.missClass):
-            raise missingclass()
-        
-        #print("Class Name",self.klassName,"Classes:", self.klassDic[self.klassName])
-        #print("Class Name",self.klassName,"Inherits:", self.klassInher[self.klassName])
-        #print("DicMethod",self.methodDic)
-        self.methodDic = {}
+            
+
     
     def enterMethodCall(self, ctx: coolParser.MethodCallContext):
         self.methodCalls[ctx.ID().getText()] = ''
@@ -111,8 +90,6 @@ class listenerTwo(coolListener):
                 self.methodCalls[ctx.ID().getText()] += "Int" + ','
             else:
                 self.methodCalls[ctx.ID().getText()] += parms.getText() + ','
-
-        print("method calls",self.methodCalls)
     
     def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
         if ctx.ID().getText() in self.methodFormal.keys():
@@ -126,7 +103,6 @@ class listenerTwo(coolListener):
                                 raise overridingmethod4()
             else:
                 raise signaturechange() 
-
         self.methodFormal[ctx.ID().getText()] = ""
         for x in ctx.formal():
             self.tempFormal.append(x.getText().split(':')[1])
@@ -136,11 +112,11 @@ class listenerTwo(coolListener):
         self.methodDic[ctx.ID().getText()] = ""
         self.methodDic[ctx.ID().getText()] += ctx.TYPE().getText() + ","
 
-        print("method formal", self.methodFormal)
-    
-    def exitMethodCall(self, ctx: coolParser.MethodCallContext):
-        if self.badDispatch:
-            raise baddispatch()  
+        #print("method formal", self.methodFormal)
+    def exitMethodDecl(self, ctx: coolParser.MethodDeclContext):
+        self.MethDeclType = ctx.TYPE().getText()
+        self.tempFormal = []
+        self.tempFormalID = [] 
     
     def enterPrimary(self, ctx: coolParser.PrimaryContext):
         if ctx.ID() is not None:
@@ -184,6 +160,9 @@ class listenerTwo(coolListener):
                     print("check",ctx.getText())
                     self.operation = ''
                     self.badArith = True
+    def exitPrimary(self, ctx: coolParser.PrimaryContext):
+        if(self.badArith):
+            raise badarith()
 
     def enterMethodDecl2(self, ctx: coolParser.MethodDecl2Context):
         print('Buenas7',ctx.ID().getText())
@@ -217,11 +196,13 @@ class listenerTwo(coolListener):
             raise anattributenamedself()
     
     def printObj(self):
-        print("From Listener two, print obj_________________________________")
+        print("***From Listener two, print obj_________________________________")
         print("FINAL klass Dic",            self.klassDic)
         print("FINAL method Dic",           self.methodDic)
         print("FINAL klass inher",          self.klassInher)
         print("FINAL klass Method Calls",   self.methodCalls)
         print("FINAL klass Method Formal",  self.methodFormal)
+        print("INIT LAST",                  self.tempFormalID)
+        print("***From Listener two, print obj_________________________________")
 
 

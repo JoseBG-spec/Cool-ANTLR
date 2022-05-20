@@ -64,7 +64,47 @@ def compile(file):
     print("Listener Dummy")
     print(vars(dummy))
 
-    lthree= listenerTwo()
+    lthree= listenerThree(
+                        ltwo.predefined,
+                        ltwo.main,
+                        ltwo.redefineInt,
+                        ltwo.anAttributeNamedSelf,
+                        ltwo.inheritsBool,
+                        ltwo.inheritsSelfType,
+                        ltwo.inheritsString,
+                        ltwo.letSelf,
+                        ltwo.redefinedObject,
+                        ltwo.selfAssignment,
+                        ltwo.selfInformalParameter,
+                        ltwo.selfTypeParameterPosition,
+                        ltwo.selfTypeRedeclared,
+                        ltwo.operation,
+                        ltwo.badArith,
+
+                        ltwo.klassDic,
+                        ltwo.methodDic,
+                        ltwo.klassInher,
+                        ltwo.methodCalls,
+                        ltwo.methodFormal,
+
+                        ltwo.klassName,
+                        ltwo.letCall,
+                        ltwo.letID,
+                        ltwo.letExit,
+                        ltwo.strs,
+                        ltwo.MethDeclType,
+                        ltwo.caseSt,
+                        ltwo.assocID,
+
+                        ltwo.formalCh,
+                        ltwo.badDispatch,
+                        ltwo.badEqualityTest1,
+                        ltwo.badEqualityTest2,
+                        ltwo.missClass,
+                        ltwo.methDeclY,
+                        ltwo.tempFormal,
+                        ltwo.tempFormalID
+    ) 
     walker.walk(lthree, tree)
     print("########################################")
     print("Listener 3")
@@ -76,14 +116,6 @@ def dummy():
 
 if __name__ == '__main__':
     #compile('resources/semantic/input/assignment.cool')
-    #compile('resources/semantic/input/basic.cool')
-    #compile('resources/semantic/input/basicclassestree.cool')
-    ##compile('resources/semantic/input/cells.cool')
-    #compile('resources/semantic/input/classes.cool') Check how to see fi there is no main
-    #compile('resources/semantic/input/compare.cool')
-    #compile('resources/semantic/input/comparisons.cool')  Check how to see fi there is no main
-    #compile('resources/semantic/input/cycleinmethods.cool')
-    #compile('resources/semantic/input/dispatch.cool')
-    compile('resources/semantic/input/lubtest.cool')
+    compile('resources/semantic/input/signaturechange.cool')
     #Forwards inherits needs to check all classes before
     #WTF hairyScary

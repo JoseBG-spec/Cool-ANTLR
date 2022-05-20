@@ -90,26 +90,6 @@ class listenerTwo(coolListener):
                 self.methodCalls[ctx.ID().getText()] += "Int" + ','
             else:
                 self.methodCalls[ctx.ID().getText()] += parms.getText() + ','
-
-    def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
-        if ctx.ID().getText() in self.methodFormal.keys():
-            print('Casio',self.methodFormal[ctx.ID().getText()],self.methodFormal[ctx.ID().getText()].split('|'),len(ctx.formal()))
-            if len(ctx.formal()) == len(self.methodFormal[ctx.ID().getText()].split('|'))-1:
-                for tempFormalID in ctx.formal():
-                    for l in range(len(self.methodFormal[ctx.ID().getText()].split('|'))):
-                        if tempFormalID.getText().split(':')[0] in self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[0]:
-                            if tempFormalID.getText().split(':')[1] != self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1]:
-                                print('Game',tempFormalID.getText().split(':')[1],self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1])
-                                raise overridingmethod4()
-            else:
-                raise signaturechange() 
-
-
-        #print("method formal", self.methodFormal)
-    def exitMethodDecl(self, ctx: coolParser.MethodDeclContext):
-        self.MethDeclType = ctx.TYPE().getText()
-        self.tempFormal = []
-        self.tempFormalID = [] 
     
     def enterPrimary(self, ctx: coolParser.PrimaryContext):
         if ctx.ID() is not None:
@@ -207,9 +187,15 @@ class listenerTwo(coolListener):
                     if ctx.formal()[x].getText().split(':')[1] != self.methodCalls[ctx.ID().getText()].split(',')[x]:
                         raise badargs1()
     
+    ##!!!
+    def enterWhileLoop(self, ctx: coolParser.WhileLoopContext):
+        if ctx.expr(0).getText() == self.tempFormalID:
+            if self.formalCh != 'Int':
+                raise badwhilecond()
+    
     def enterMethod(self, ctx: coolParser.MethodContext):
         if(ctx.params):
-            print('Methodddddd',ctx.params[0].getText(),self.tempFormal)
+            print('badmethodcallsitself',ctx.params[0].getText(),self.tempFormal)
         if self.tempFormal:
             if self.tempFormal[0] == "Int":
                 if not ctx.params[0].getText().isnumeric():
@@ -233,18 +219,12 @@ class listenerTwo(coolListener):
         if (self.letSelf):
             raise letself()
 
-    def enterIfThenElse(self, ctx: coolParser.IfThenElseContext):
-        print("enterIfThenElse",ctx.expr()[1].getText())
-        for expr in ctx.expr()[1:]:
-            print('ThenElse',expr.getText(), self.methodDic.keys())
-            if expr.getText() in self.methodDic.keys():
-                if self.methodDic[expr.getText()][0] in self.klassInher.keys():
-                    if self.MethDeclType != "Object":
-                        if self.MethDeclType not in self.klassInher[self.methodDic[expr.getText()][0]]:
-                            raise lubtest()
-            else:
-                print('NopeIF')
-    
+    #print("method formal", self.methodFormal)
+    def exitMethodDecl(self, ctx: coolParser.MethodDeclContext):
+        self.MethDeclType = ctx.TYPE().getText()
+        self.tempFormal = []
+        self.tempFormalID = [] 
+
     def printObj(self):
         print("***From Listener two, print obj_________________________________")
         print("FINAL klass Dic",            self.klassDic)

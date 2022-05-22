@@ -51,34 +51,13 @@ class listenerTwo(coolListener):
         self.tempFormalID           = []
 
     def enterKlass(self, ctx:coolParser.KlassContext):
-        if ctx.TYPE(0).getText() in self.klassDic.keys():
-            raise redefinedclass()
         self.klassName = ctx.TYPE(0).getText()
         self.klassDic[self.klassName] = ''
         self.klassInher[self.klassName]=''
         
-        if ctx.TYPE(0).getText() == 'Main':
-            self.main = True
-        if ctx.TYPE(0).getText() == 'Int':
-            self.redefineInt = True
-        if ctx.TYPE(0).getText() == 'Object':
-            self.redefinedObject = True
-        if ctx.TYPE(0).getText() == 'SELF_TYPE':
-            self.selfTypeRedeclared = True
         #print(ctx.TYPE(1))
         if (ctx.TYPE(1) is not None):
             self.klassInher[self.klassName]+= ctx.TYPE(1).getText() + ","
-            if ctx.TYPE(1).getText() not in self.klassDic.keys():
-                if ctx.TYPE(1).getText() == 'Bool':
-                    self.inheritsBool = True
-                if ctx.TYPE(1).getText() == 'SELF_TYPE':
-                    self.inheritsSelfType = True
-                if ctx.TYPE(1).getText() == 'String':
-                    self.inheritsString = True
-                elif(ctx.TYPE(1).getText() not in self.predefined):
-                    self.missClass = True
-            #self.inherits[self.klassNo] = ctx.TYPE(1).getText()
-            
 
     
     def enterMethodCall(self, ctx: coolParser.MethodCallContext):
@@ -135,25 +114,7 @@ class listenerTwo(coolListener):
                     self.badArith = True
 
     def enterMethodDecl2(self, ctx: coolParser.MethodDecl2Context):
-        print('Buenas7',ctx.ID().getText())
         self.methodDic[ctx.ID().getText()] = ""
-        if self.klassInher[self.klassName] is not empty:
-            for methods in self.klassInher[self.klassName].split(','):
-                if methods != '' and methods not in self.predefined:
-                    print(ctx.ID().getText(),methods)
-                    if ctx.ID().getText() in self.klassDic[methods]:
-                        raise attroverride()
-        if ctx.ID().getText() == "self":
-            self.anAttributeNamedSelf = True
-        elif(ctx.expr() is not None):
-            if ctx.expr().getText() not in self.klassDic[self.klassName].split(",") and "new" not in ctx.expr().getText() and len(ctx.expr().getText()) != 0 and '""' not in ctx.expr().getText():
-                print(ctx.expr().getText(),self.klassDic[self.klassName].split(","),len(ctx.expr().getText()),'""')
-                if(ctx.expr().getText() == "self"):
-                    self.selfAssignment = True
-                elif(ctx.expr().getText() == "true"):
-                    print("true")
-                elif(not ctx.expr().getText().isnumeric()):
-                    raise attrbadinit()
                 
 
         self.MethDeclType = ctx.TYPE().getText()

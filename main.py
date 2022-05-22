@@ -14,27 +14,12 @@ def compile(file):
 
     ltwo= listenerTwo()
     walker.walk(ltwo, tree)
-    print("########################################")
+    #print("########################################")
     print("Listener 2")
-    print(vars(ltwo))
+    print(ltwo.printObj())
 
     dummy= dummyListener(
                         ltwo.predefined,
-                        ltwo.main,
-                        ltwo.redefineInt,
-                        ltwo.anAttributeNamedSelf,
-                        ltwo.inheritsBool,
-                        ltwo.inheritsSelfType,
-                        ltwo.inheritsString,
-                        ltwo.letSelf,
-                        ltwo.redefinedObject,
-                        ltwo.selfAssignment,
-                        ltwo.selfInformalParameter,
-                        ltwo.selfTypeParameterPosition,
-                        ltwo.selfTypeRedeclared,
-                        ltwo.operation,
-                        ltwo.badArith,
-
                         ltwo.klassDic,
                         ltwo.methodDic,
                         ltwo.klassInher,
@@ -42,29 +27,16 @@ def compile(file):
                         ltwo.methodFormal,
 
                         ltwo.klassName,
-                        ltwo.letCall,
-                        ltwo.letID,
-                        ltwo.letExit,
-                        ltwo.strs,
-                        ltwo.MethDeclType,
-                        ltwo.caseSt,
-                        ltwo.assocID,
 
-                        ltwo.formalCh,
-                        ltwo.badDispatch,
-                        ltwo.badEqualityTest1,
-                        ltwo.badEqualityTest2,
-                        ltwo.missClass,
-                        ltwo.methDeclY,
                         ltwo.tempFormal,
                         ltwo.tempFormalID
     ) 
     walker.walk(dummy, tree)
-    print("########################################")
-    print("Listener Dummy")
-    print(vars(dummy))
+    #print("########################################")
+    #print("Listener Dummy")
+    #print(dummy.printObj())
 
-    lthree= listenerThree(
+    """ lthree= listenerThree(
                         ltwo.predefined,
                         ltwo.main,
                         ltwo.redefineInt,
@@ -108,7 +80,7 @@ def compile(file):
     walker.walk(lthree, tree)
     print("########################################")
     print("Listener 3")
-    print(vars(lthree))
+    print(vars(lthree)) """
 
 
 def dummy():
@@ -116,6 +88,6 @@ def dummy():
 
 if __name__ == '__main__':
     #compile('resources/semantic/input/assignment.cool')
-    compile('resources/semantic/input/signaturechange.cool')
+    compile('resources/semantic/input/anattributenamedself.cool')
     #Forwards inherits needs to check all classes before
     #WTF hairyScary

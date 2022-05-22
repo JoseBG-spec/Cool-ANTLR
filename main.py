@@ -14,7 +14,7 @@ def compile(file):
 
     ltwo= listenerTwo()
     walker.walk(ltwo, tree)
-    #print("########################################")
+    print("########################################")
     print("Listener 2")
     print(ltwo.printObj())
 
@@ -32,9 +32,9 @@ def compile(file):
                         ltwo.tempFormalID
     ) 
     walker.walk(dummy, tree)
-    #print("########################################")
-    #print("Listener Dummy")
-    #print(dummy.printObj())
+    print("########################################")
+    print("Listener Dummy")
+    print(dummy.printObj())
 
     """ lthree= listenerThree(
                         ltwo.predefined,
@@ -88,6 +88,9 @@ def dummy():
 
 if __name__ == '__main__':
     #compile('resources/semantic/input/assignment.cool')
-    compile('resources/semantic/input/signaturechange.cool')
+
+    #compile('resources/semantic/input/badarith.cool')
+    compile('resources/semantic/input/staticdispatch.cool')
+
     #Forwards inherits needs to check all classes before
     #WTF hairyScary

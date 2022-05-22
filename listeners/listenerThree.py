@@ -90,29 +90,6 @@ class listenerThree(coolListener):
         self.tempFormal             = tempFormal
         self.tempFormalID           = tempFormalID
 
-    ##!!!
-    def enterIfThenElse(self, ctx: coolParser.IfThenElseContext):
-        print("enterIfThenElse",ctx.expr()[1].getText())
-        for expr in ctx.expr()[1:]:
-            print('ThenElse',expr.getText(), self.methodDic.keys())
-            if expr.getText() in self.methodDic.keys():
-                if self.methodDic[expr.getText()][0] in self.klassInher.keys():
-                    if self.MethDeclType != "Object":
-                        if self.MethDeclType not in self.klassInher[self.methodDic[expr.getText()][0]]:
-                            raise lubtest()
-            else:
-                print('NopeIF')
-
-    def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
-        if ctx.ID().getText() in self.methodFormal.keys():
-            print('Casio',self.methodFormal[ctx.ID().getText()],self.methodFormal[ctx.ID().getText()].split('|'),len(ctx.formal()))
-            if len(ctx.formal()) == len(self.methodFormal[ctx.ID().getText()].split('|'))-1:
-                for tempFormalID in ctx.formal():
-                    for l in range(len(self.methodFormal[ctx.ID().getText()].split('|'))):
-                        if tempFormalID.getText().split(':')[0] in self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[0]:
-                            if tempFormalID.getText().split(':')[1] != self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1]:
-                                print('Game',tempFormalID.getText().split(':')[1],self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1])
-                                raise overridingmethod4()
-            else:
-                ##!!!
-                raise signaturechange()
+    #!
+    def function(self, ctx: coolParser.IfThenElseContext):
+        print()

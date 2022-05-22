@@ -39,7 +39,7 @@ def test_forwardinherits():
 def test_hairyscary():
     compile('resources/semantic/input/hairyscary.cool')
 
-def test_ofi():
+def test_if():
     compile('resources/semantic/input/if.cool')
 
 def test_objinh():

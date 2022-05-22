@@ -203,6 +203,8 @@ class dummyListener(coolListener):
                     self.strs = 'Boolean'
                     self.operation = ''
         
+        val= True
+
         if self.operation is not None:
             #print('Gamer',ctx.getText());
             if self.operation == 'sum':
@@ -210,9 +212,22 @@ class dummyListener(coolListener):
                     if ctx.ID().getText() in self.methodDic.keys():
                         print(ctx.getText())
                 elif ctx.INTEGER() is None:
-                    print("check",ctx.getText())
+                    print("badarith?",ctx.getText())
                     self.operation = ''
                     self.badArith = True
+
+                    print("badarith?", type(ctx.getText()))
+                    print("badarith?", ctx.getText()) 
+                    print("badarith?", ctx.INTEGER()) 
+
+                    #!o sea quise checar si la linea tiene un numero pero no funco
+
+                    for character in ctx.getText():
+                        if character.isdigit():
+                            val= False
+
+                    if not val:
+                        self.badArith = False
 
                 
     
@@ -259,20 +274,27 @@ class dummyListener(coolListener):
                                 print('Game',tempFormalID.getText().split(':')[1],self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1])
                                 raise overridingmethod4()
             else:
-                #! el "if, else" no esta funcionando bien, se llega hasta  el attroveride
                 raise signaturechange()
         
         self.MethDeclType = ctx.TYPE().getText()        
         #raise badargs1()---------------------------------------
         if ctx.ID().getText() in self.methodCalls.keys():
-            print('OJO',len(ctx.formal()),len(self.methodCalls[ctx.ID().getText()].split(',')))
             if len(ctx.formal()) == len(self.methodCalls[ctx.ID().getText()].split(','))-1:
-                for x in range(len(ctx.formal())):                    
-                    if ctx.formal()[x].getText().split(':')[1] != self.methodCalls[ctx.ID().getText()].split(',')[x]:
-                        raise badargs1()
+                for x in range(len(ctx.formal())):
+                    print('badargs? '+str(x),
+                    ctx.formal()[x].getText().split(':')[1], 
+                    self.methodCalls[ctx.ID().getText()].split(',')[x]) 
+                    
+                    if (ctx.formal()[x].getText().split(':')[1] 
+                        != 
+                        self.methodCalls[ctx.ID().getText()].split(',')[x]):
+
+                        l= isinstance(self.methodCalls[ctx.ID().getText()].split(',')[x], str)
+                        print("Debug_0", l)
+
+                        if l: 
+                            raise badargs1()
                 
-        
-             
     
     def exitMethodDecl(self, ctx: coolParser.MethodDeclContext):
         if (self.anAttributeNamedSelf):
@@ -417,7 +439,14 @@ class dummyListener(coolListener):
             if ctx.expr()[0].getText().split('new')[1].split(')')[0] not in self.klassInher[ctx.TYPE().getText()].split(','):
                 raise trickyatdispatch2()
         else:
+            print("Badstaticdispatch?")
+            print("Text: ", ctx.ID().getText())
+            print("Split ", self.klassInher[self.klassName])
             if ctx.ID().getText() not in self.klassInher[self.klassName].split(','):
+
+                #! basta con un if correcto para que pase el 
+                #! staticdispatch y el tricky dispatch
+
                 raise badstaticdispatch()
                 
 

@@ -65,6 +65,9 @@ class dummyListener(coolListener):
         self.tempFormal             = tempFormal
         self.tempFormalID           = tempFormalID
 
+        #Last added
+        self.countAttrOverride = 0
+
         """ print("--INIT DUMMY_________________________________")
         print("FINAL klass Dic",            self.klassDic)
         print("FINAL method Dic",           self.methodDic)
@@ -131,11 +134,12 @@ class dummyListener(coolListener):
         if ctx.expr() is not None:
             print('let2',ctx.expr().getText())
             if "new" in ctx.expr().getText():
-                print('let3',self.klassInher.keys())
+                print('let3',self.klassInher.keys(),self.letCall)
                 
                 #!El error esta en este if, y conflicto con bad dsipatch
-                if (ctx.expr().getText().split('new')[1] not in self.klassInher.keys()):
-                    if ctx.expr().getText().split('new')[1] != self.letCall:
+                if (ctx.expr().getText().split('new')[1] in self.klassInher.keys()):
+                    print(self.klassInher[ctx.expr().getText().split('new')[1]])
+                    if ctx.expr().getText().split('new')[1] != self.letCall and self.klassInher[ctx.expr().getText().split('new')[1]].split(',')[0]  != self.letCall:
                         raise letbadinit()
                     
     
@@ -288,9 +292,13 @@ class dummyListener(coolListener):
         if self.klassInher[self.klassName] is not empty:
             for methods in self.klassInher[self.klassName].split(','):
                 if methods != '' and methods not in self.predefined:
-                    print(ctx.ID().getText(),methods)
-                    if ctx.ID().getText() in self.klassDic[methods]:
-                        raise attroverride()
+                    print(ctx.ID().getText(),methods,":",self.klassDic[methods])
+                    if ctx.ID().getText() in self.klassDic[methods] and ctx.ID().getText() in self.klassDic[self.klassName]:
+                      self.countAttrOverride += 2
+            print("countAttrOverride",self.countAttrOverride)
+            if(self.countAttrOverride > 1):
+                raise attroverride()
+            self.countAttrOverride = 0
         if ctx.ID().getText() == "self":
             self.anAttributeNamedSelf = True
         elif(ctx.expr() is not None):

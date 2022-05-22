@@ -88,6 +88,6 @@ def dummy():
 
 if __name__ == '__main__':
     #compile('resources/semantic/input/assignment.cool')
-    compile('resources/semantic/input/anattributenamedself.cool')
+    compile('resources/semantic/input/signaturechange.cool')
     #Forwards inherits needs to check all classes before
     #WTF hairyScary

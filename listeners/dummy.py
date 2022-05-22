@@ -132,9 +132,12 @@ class dummyListener(coolListener):
             print('let2',ctx.expr().getText())
             if "new" in ctx.expr().getText():
                 print('let3',self.klassInher.keys())
-                if  ctx.expr().getText().split('new')[1] not in self.klassInher.keys():
+                
+                #!El error esta en este if, y conflicto con bad dsipatch
+                if (ctx.expr().getText().split('new')[1] not in self.klassInher.keys()):
                     if ctx.expr().getText().split('new')[1] != self.letCall:
                         raise letbadinit()
+                    
     
     def exitLet_decl(self, ctx: coolParser.Let_declContext):
         if (self.letSelf):
@@ -235,6 +238,11 @@ class dummyListener(coolListener):
             self.tempFormalID.append(x.getText().split(':')[0])
         #if self.klassInher[self.klassName] is not empty:
         #for methods in self.klassInher[self.klassName].split(',')[1:]:
+        #DupFormals
+        if len(self.tempFormalID) != len(set(self.tempFormalID)):
+            print("Duplicates",len(self.tempFormalID), len(set(self.tempFormalID)))
+            raise dupformals()
+        
         #OverridingMethod4
         print('EnterMethDeclMethsForm',self.methodFormal.keys())
         if ctx.ID().getText() in self.methodFormal.keys():
@@ -247,13 +255,10 @@ class dummyListener(coolListener):
                                 print('Game',tempFormalID.getText().split(':')[1],self.methodFormal[ctx.ID().getText()].split('|')[l].split(':')[1])
                                 raise overridingmethod4()
             else:
+                #! el "if, else" no esta funcionando bien, se llega hasta  el attroveride
                 raise signaturechange()
         
         self.MethDeclType = ctx.TYPE().getText()        
-        #DupFormals
-        if len(self.tempFormalID) != len(set(self.tempFormalID)):
-            print("Duplicates",len(self.tempFormalID), len(set(self.tempFormalID)))
-            raise dupformals()
         #raise badargs1()---------------------------------------
         if ctx.ID().getText() in self.methodCalls.keys():
             print('OJO',len(ctx.formal()),len(self.methodCalls[ctx.ID().getText()].split(',')))

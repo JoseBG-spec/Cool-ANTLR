@@ -9,6 +9,9 @@ from antlr.coolParser import coolParser
 
 class dummyListener(coolListener):
 
+    def __str__(self):
+        return "foo"
+
     def __init__(self, 
     predefined,
 

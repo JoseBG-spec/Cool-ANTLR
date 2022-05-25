@@ -7,6 +7,10 @@ from antlr.coolListener import coolListener
 from antlr.coolParser import coolParser
 
 class listenerTwo(coolListener):
+
+    def __str__(self):
+        return "foo"
+
     def __init__(self):
         self.predefined = ['Object','Int','String','Boolean','SELF_TYPE','IO','Bool']
         self.klassName  =             ""

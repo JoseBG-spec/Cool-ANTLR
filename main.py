@@ -6,6 +6,12 @@ from listeners.dummy import dummyListener
 from listeners.listenerTwo import listenerTwo
 from listeners.listenerThree import listenerThree
 
+from listeners.tree import TreePrinter
+
+from listeners.datasegment import DataGenerator
+from listeners.gencode import GenCode
+
+
 def compile(file):
     parser = coolParser(CommonTokenStream(coolLexer(FileStream(file))))
     tree = parser.program()
@@ -36,51 +42,11 @@ def compile(file):
     print("Listener Dummy")
     print(dummy.printObj())
 
-    """ lthree= listenerThree(
-                        ltwo.predefined,
-                        ltwo.main,
-                        ltwo.redefineInt,
-                        ltwo.anAttributeNamedSelf,
-                        ltwo.inheritsBool,
-                        ltwo.inheritsSelfType,
-                        ltwo.inheritsString,
-                        ltwo.letSelf,
-                        ltwo.redefinedObject,
-                        ltwo.selfAssignment,
-                        ltwo.selfInformalParameter,
-                        ltwo.selfTypeParameterPosition,
-                        ltwo.selfTypeRedeclared,
-                        ltwo.operation,
-                        ltwo.badArith,
+    tree= TreePrinter(dummy)
 
-                        ltwo.klassDic,
-                        ltwo.methodDic,
-                        ltwo.klassInher,
-                        ltwo.methodCalls,
-                        ltwo.methodFormal,
-
-                        ltwo.klassName,
-                        ltwo.letCall,
-                        ltwo.letID,
-                        ltwo.letExit,
-                        ltwo.strs,
-                        ltwo.MethDeclType,
-                        ltwo.caseSt,
-                        ltwo.assocID,
-
-                        ltwo.formalCh,
-                        ltwo.badDispatch,
-                        ltwo.badEqualityTest1,
-                        ltwo.badEqualityTest2,
-                        ltwo.missClass,
-                        ltwo.methDeclY,
-                        ltwo.tempFormal,
-                        ltwo.tempFormalID
-    ) 
-    walker.walk(lthree, tree)
-    print("########################################")
-    print("Listener 3")
-    print(vars(lthree)) """
+    #with open('test.asm', "w") as writer:
+        #writer.write(dataGen.result)
+        #writer.write(gencode.result)
 
 
 def dummy():
@@ -90,7 +56,7 @@ if __name__ == '__main__':
     #compile('resources/semantic/input/assignment.cool')
 
     #compile('resources/semantic/input/badarith.cool')
-    compile('resources/semantic/input/staticdispatch.cool')
+    compile('resources/semantic/input/io.cool')
 
     #Forwards inherits needs to check all classes before
     #WTF hairyScary

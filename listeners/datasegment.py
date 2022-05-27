@@ -3,24 +3,128 @@ from antlr.coolParser import coolParser
 
 from util import asm
 
+from listeners.listenerTwo import listenerTwo
+
+#from util.structure import _allClasses as classesDict, lookupClass
+
+constants= [
+    'int',
+    'bool',
+    'string'
+]
+
+default_size= {
+    'Object':   3,
+    'IO':       3,
+    'Int':      4,
+    'Bool':     4,
+    'String':   5
+}
+
 class DataGenerator(coolListener):
-    def __init__(self):
+    def __init__(self, dummy):
         self.result = ''
         self.constants = 0
 
+        self.dummy= dummy
+
+    #! ¿De que se encarga el datasegment?
+
     #! poner los metodos con el nombre que usamos en los listeners
-    #!! 
+    #!!
+
+    #! Funciones para contruir el "header del output"
+
+    def defaultLabels(self):
+
+        #
+        if self.dummy.klassDic.get('Int') == None:
+            self.dummy.klassDic["Int"] = ""
+
+        if self.dummy.klassDic.get('Bool') == None:
+            self.dummy.klassDic["Bool"] = ""
+
+        if self.dummy.klassDic.get('String') == None:
+            self.dummy.klassDic["String"] = ""
+
+
+        #Prototype tags 
+        prototype_tags = ""
+        for classname in self.dummy.klassDic.keys():
+            if classname == 'Object' or classname == 'Bool':
+                continue
+            prototype_tags += (
+                asm.tpl_prototype_tag.substitute(
+                    name=classname
+                )
+            )
+
+        print("¿ proto_tags: ", prototype_tags)
+
+        #Class tags
+        class_tags= ""
+        for classname in constants:
+            class_tags += (
+                asm.tpl_global_class_tag.substitute(
+                    name=classname
+                )
+            )
+
+        print("¿ class_tags: ", class_tags)
+
+
+        class_tags_id= ""
+        for name in self.dummy.klassDic.keys():
+            if name == 'Main':
+                continue
+            if name == 'String':
+                i = 4
+            if name == 'Bool':
+                i = 3
+            if name == 'Int':
+                i = 2
+
+            class_tags_id += asm.tpl_class_tag.substitute(
+                name=name.lower(),
+                n= i
+            )
+            i+= 1
+
+        print("¿ class_tags_IDs: ", class_tags_id)
+
+        self.result += asm.tpl_global_tags_start.substitute(
+            prototype_tags= prototype_tags,
+            class_tags = class_tags
+        )
+
+        self.result += class_tags_id
+
+    #!
 
     def enterProgram(self, ctx: coolParser.ProgramContext):
+
         self.result += asm.tpl_start_data
+
+        self.defaultLabels()
+
+
+
+        
 
     def enterMethodCall(self, ctx: coolParser.MethodCallContext):
         self.result += asm.tpl_var_decl.substitute(
             varname = ctx.getChild(1).getText()
         )
-        ctx.code = ''
 
-""" 
+    def enterSum(self, ctx: coolParser.MethodCallContext):
+        self.result += asm.tpl_suma.substitute(
+            varname = ctx.getChild(1).getText()
+        )
+
+    def exitProgram(self, ctx: coolParser.ProgramContext):
+        self.result += "\n $$$$"
+
+"""
     def enterDeclaracion(self, ctx: coolParser.DeclaracionContext):
         self.result += asm.tpl_var_decl.substitute(
             varname = ctx.getChild(1).getText()

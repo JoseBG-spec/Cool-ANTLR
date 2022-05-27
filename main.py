@@ -47,17 +47,25 @@ def compile(file):
     print("tree printer")
     walker.walk(TreePrinter(), tree)
 
-    #with open('test.asm', "w") as writer:
-        #writer.write(DataGenerator.result)
-        #writer.write(gencode.result)
-    #writer.close()
+    print("########################################")
+
+    Dg = DataGenerator(dummy)
+    walker.walk(Dg, tree)
+
+    Cg = GenCode()
+    walker.walk(Cg, tree)
+
+    with open('test.asm', "w") as writer:
+        writer.write(Dg.result)
+        writer.write(Cg.result)
+    writer.close()
 
 
 def dummy():
     raise SystemExit(1)
 
 if __name__ == '__main__':
-    
+
     #compile('resources/semantic/input/io.cool')
 
     #Input.txt has the code of io.cool 

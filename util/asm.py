@@ -121,3 +121,27 @@ tpl_call = Template("""
 $push_arguments
     jal     $name
 """)
+
+#DEFAULT VALUES AT THE START OF FILE
+
+# GLOBAL TAGS
+tpl_global_tags_start = Template("""
+    .align  2
+    .globl  class_nameTab$prototype_tags
+    .globl  bool_const0
+    .globl  bool_const1$class_tags""")
+    
+tpl_global_class_tag = Template(("""
+    .globl  _${name}_tag"""))  # lowercase
+
+# CLASS TAGS
+tpl_class_tag = Template("""
+_${name}_tag:
+    .word   $n"""
+)
+
+# PROTOTYPE
+tpl_prototype_tag = Template(("""
+    .globl  ${name}_protObj"""))
+
+

@@ -9,15 +9,15 @@ class GenCode(coolListener):
         self.stack = []
         self.labels = 0
     
-    #! poner los metodos con el nombre que usamos en los listeners
-    #!! 
+    #! ¿De que se encarga el gencode?
 
     def enterProgram(self, ctx:coolParser.ProgramContext):
         self.result += asm.tpl_start_text
     
     def exitProgram(self, ctx: coolParser.ProgramContext):
-        for c in ctx.getChildren():
-            self.result += c.code
+        #for c in ctx.getChildren():
+            #! ¿ de donde saco el c.code?
+            #self.result += c.code
         self.result += asm.tpl_end
 """ 
     def exitPrimaria(self, ctx:coolParser.PrimariaContext):

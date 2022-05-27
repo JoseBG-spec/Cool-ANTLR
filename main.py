@@ -42,7 +42,7 @@ def compile(file):
     print("Listener Dummy")
     print(dummy.printObj())
 
-    tree= TreePrinter(dummy)
+    walker.walk(TreePrinter(), tree)
 
     #with open('test.asm', "w") as writer:
         #writer.write(dataGen.result)

@@ -21,19 +21,15 @@ default_size= {
     'String':   5
 }
 
+int_lst= []
+str_lst= []
+
 class DataGenerator(coolListener):
     def __init__(self, dummy):
         self.result = ''
         self.constants = 0
 
         self.dummy= dummy
-
-    #! ¿De que se encarga el datasegment?
-
-    #! poner los metodos con el nombre que usamos en los listeners
-    #!!
-
-    #! Funciones para contruir el "header del output"
 
     def defaultLabels(self):
 
@@ -104,22 +100,25 @@ class DataGenerator(coolListener):
 
         self.result += asm.tpl_MemMgr
 
-        #!
-        print("klasDic_keyes: ", self.dummy.klassDic.keys())
+    def stringLabels(self):
 
         #!!!! Create str obj, str type 4
-        stringLen = len("String")
-        self.result += asm.tpl_str_obj.substitute(
-            const_no= 0,
-            str_value= "Hello",
-        )
+
+        for i in range(0, len(str_lst)):
+            stringLen = len("String")
+            self.result += asm.tpl_str_obj.substitute(
+                const_no= i,
+                str_value= str_lst[i],
+            )
         
-        print("klasDic_keyes: ", self.dummy.klassDic)
         #!!!! Create int obj, int type 2
-        self.result += asm.tpl_int_obj.substitute(
-            int_no= 0,
-            int_value= str(5),
-        )
+        for i in range(0, len(str_lst)):
+            stringLen = len("String")
+            self.result += asm.tpl_int_obj.substitute(
+                int_no= i,
+                int_value= str(int_lst[i]),
+            )
+
         #self.result += asm.tpl_mOne
         
         #for name in classesDict.keys():
@@ -135,19 +134,11 @@ class DataGenerator(coolListener):
         #! Create bool obj
         self.result += asm.tpl_bool
 
-
-
-
-
     def enterProgram(self, ctx: coolParser.ProgramContext):
 
         self.result += asm.tpl_start_data
 
-        self.defaultLabels()
-
-
-
-        
+        self.defaultLabels()       
 
     def enterMethodCall(self, ctx: coolParser.MethodCallContext):
         self.result += asm.tpl_var_decl.substitute(
@@ -159,7 +150,23 @@ class DataGenerator(coolListener):
             varname = ctx.getChild(1).getText()
         )
 
+    def enterPrimary(self, ctx: coolParser.PrimaryContext):
+        print("ctx", ctx.getText())
+
+        if ctx.ID() != None:
+            print("beunas")
+        elif ctx.STRING() != None:
+            str_lst.append(ctx.STRING().getText())
+            print("str_lst", str_lst)
+        elif ctx.INTEGER() != None:
+            int_lst.append(ctx.INTEGER().getText())
+            print("int_lst", int_lst)
+        
+
+
+
     def exitProgram(self, ctx: coolParser.ProgramContext):
+        self.stringLabels()
         self.result += "\n $$$$$$$$$$$$$$$$$$$$$$$$$$"
 
 """

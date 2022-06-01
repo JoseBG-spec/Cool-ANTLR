@@ -31,7 +31,7 @@ str_const0:
 	.word	4
 	.word	5
 	.word	String_dispTab
-	.word	Hello
+	.word	"test"
 	.byte	0	
 	.align	2
 	.word	-1

@@ -48,7 +48,7 @@ class DataGenerator(coolListener):
             self.dummy.klassDic["String"] = ""
 
 
-        #Prototype tags 
+        #!Prototype tags 
         prototype_tags = ""
         for classname in self.dummy.klassDic.keys():
             if classname == 'Object' or classname == 'Bool':
@@ -61,7 +61,7 @@ class DataGenerator(coolListener):
 
         print("¿ proto_tags: ", prototype_tags)
 
-        #Class tags
+        #!Class tags
         class_tags= ""
         for classname in constants:
             class_tags += (
@@ -74,6 +74,7 @@ class DataGenerator(coolListener):
 
 
         class_tags_id= ""
+        i= 0
         for name in self.dummy.klassDic.keys():
             if name == 'Main':
                 continue
@@ -88,8 +89,8 @@ class DataGenerator(coolListener):
                 name=name.lower(),
                 n= i
             )
-            i+= 1
 
+        #!Class tags ID
         print("¿ class_tags_IDs: ", class_tags_id)
 
         self.result += asm.tpl_global_tags_start.substitute(
@@ -99,7 +100,44 @@ class DataGenerator(coolListener):
 
         self.result += class_tags_id
 
-    #!
+        #MemMgr
+
+        self.result += asm.tpl_MemMgr
+
+        #!
+        print("klasDic_keyes: ", self.dummy.klassDic.keys())
+
+        #!!!! Create str obj, str type 4
+        stringLen = len("String")
+        self.result += asm.tpl_str_obj.substitute(
+            const_no= 0,
+            str_value= "Hello",
+        )
+        
+        print("klasDic_keyes: ", self.dummy.klassDic)
+        #!!!! Create int obj, int type 2
+        self.result += asm.tpl_int_obj.substitute(
+            int_no= 0,
+            int_value= str(5),
+        )
+        #self.result += asm.tpl_mOne
+        
+        #for name in classesDict.keys():
+        #for name in self.dummy.klassDic.keys():
+        #    self.addStringConst(name)
+            #byte = len(name)
+
+            #print("Byte: ", byte, name)
+
+            #if byte not in self.registered_ints:
+                #self.addIntConst(byte)
+
+        #! Create bool obj
+        self.result += asm.tpl_bool
+
+
+
+
 
     def enterProgram(self, ctx: coolParser.ProgramContext):
 
@@ -122,7 +160,7 @@ class DataGenerator(coolListener):
         )
 
     def exitProgram(self, ctx: coolParser.ProgramContext):
-        self.result += "\n $$$$"
+        self.result += "\n $$$$$$$$$$$$$$$$$$$$$$$$$$"
 
 """
     def enterDeclaracion(self, ctx: coolParser.DeclaracionContext):

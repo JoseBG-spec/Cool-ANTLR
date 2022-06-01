@@ -6,8 +6,7 @@ main:
 """
 
 tpl_start_data = """
-    .data
-"""
+    .data"""
 
 tpl_var_decl = Template("""
 $varname: .word 0
@@ -130,7 +129,7 @@ tpl_global_tags_start = Template("""
     .globl  class_nameTab$prototype_tags
     .globl  bool_const0
     .globl  bool_const1$class_tags""")
-    
+
 tpl_global_class_tag = Template(("""
     .globl  _${name}_tag"""))  # lowercase
 
@@ -145,3 +144,67 @@ tpl_prototype_tag = Template(("""
     .globl  ${name}_protObj"""))
 
 
+#MemMgr
+
+tpl_MemMgr = """
+    .globl  _MemMgr_INITIALIZER
+_MemMgr_INITIALIZER:
+    .word NoGC Init
+    .globl _MemMgr_COLLECTOR
+_MemMgr_COLLECTOR:
+    .word _NoGC_Collect
+    .globl _MemMgr_TEST
+_MemMgr_TEST:
+    .word   0
+    .word   -1"""
+
+#MemMgr
+
+tpl_mOne = """
+    .word   -1"""
+
+tpl_bool= """
+	.word	-1
+bool_const0:
+	.word	3
+	.word	4
+	.word	Bool_dispTab
+	.word	0
+	.word	-1
+bool_const1:
+	.word	3
+	.word	4
+	.word	Bool_dispTab
+	.word	1"""
+
+tpl_str_obj= Template(("""
+	.word	-1
+str_const${const_no}:
+	.word	4
+	.word	5
+	.word	String_dispTab
+	.word	${str_value}
+	.byte	0	
+	.align	2"""))
+
+tpl_int_obj= Template(("""
+	.word	-1
+int_const${int_no}:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	${int_value}"""))
+
+tpl_str_disTab= """
+	.word	-1
+bool_const0:
+	.word	3
+	.word	4
+	.word	Bool_dispTab
+	.word	0
+	.word	-1
+bool_const1:
+	.word	3
+	.word	4
+	.word	Bool_dispTab
+	.word	1"""

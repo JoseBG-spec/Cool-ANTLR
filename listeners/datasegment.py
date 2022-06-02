@@ -22,7 +22,9 @@ default_size= {
 }
 
 int_lst= []
-str_lst= []
+str_lst= ["Object", "IO", "Int", "String", "Boolean"]
+
+klass_W_methods_dic= {}
 
 class DataGenerator(coolListener):
     def __init__(self, dummy):
@@ -103,21 +105,27 @@ class DataGenerator(coolListener):
     def stringLabels(self):
 
         #!!!! Create str obj, str type 4
-
+            #! Falta ver lo del int_const8
         for i in range(0, len(str_lst)):
             stringLen = len("String")
             self.result += asm.tpl_str_obj.substitute(
                 const_no= i,
                 str_value= str_lst[i],
             )
+            int_lst.append(stringLen)
         
         #!!!! Create int obj, int type 2
-        for i in range(0, len(str_lst)):
-            stringLen = len("String")
+        for i in range(0, len(int_lst)):
+
             self.result += asm.tpl_int_obj.substitute(
                 int_no= i,
                 int_value= str(int_lst[i]),
             )
+
+        print("str_lst", str_lst)
+        print("int_lst", int_lst)
+
+        print("klass_W_methods_dic", klass_W_methods_dic)
 
         #self.result += asm.tpl_mOne
         
@@ -157,12 +165,19 @@ class DataGenerator(coolListener):
             print("beunas")
         elif ctx.STRING() != None:
             str_lst.append(ctx.STRING().getText())
-            print("str_lst", str_lst)
         elif ctx.INTEGER() != None:
             int_lst.append(ctx.INTEGER().getText())
-            print("int_lst", int_lst)
-        
 
+            
+    def enterKlass(self, ctx: coolParser.KlassContext):
+        print("enter klass ctx", ctx.getText())
+        klass_W_methods_dic["klass_name"] = []
+        
+    def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
+        print("enter method ctx", ctx.getText())
+        klass_W_methods_dic["klass_name"].append("method 3")
+
+        klass_W_methods_dic["klass_name"].append("method 4")
 
 
     def exitProgram(self, ctx: coolParser.ProgramContext):

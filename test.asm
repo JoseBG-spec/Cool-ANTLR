@@ -29,17 +29,105 @@ _MemMgr_TEST:
 	.word	-1
 str_const0:
 	.word	4
-	.word	5
+	.word	8
 	.word	String_dispTab
-	.word	"test"
+	.word	int_const8
+	.ascii	Object
 	.byte	0	
 	.align	2
+	.word	-1
+	.word	-1
+str_const1:
+	.word	4
+	.word	8
+	.word	String_dispTab
+	.word	int_const8
+	.ascii	IO
+	.byte	0	
+	.align	2
+	.word	-1
+	.word	-1
+str_const2:
+	.word	4
+	.word	8
+	.word	String_dispTab
+	.word	int_const8
+	.ascii	Int
+	.byte	0	
+	.align	2
+	.word	-1
+	.word	-1
+str_const3:
+	.word	4
+	.word	8
+	.word	String_dispTab
+	.word	int_const8
+	.ascii	String
+	.byte	0	
+	.align	2
+	.word	-1
+	.word	-1
+str_const4:
+	.word	4
+	.word	8
+	.word	String_dispTab
+	.word	int_const8
+	.ascii	Boolean
+	.byte	0	
+	.align	2
+	.word	-1
+	.word	-1
+str_const5:
+	.word	4
+	.word	8
+	.word	String_dispTab
+	.word	int_const8
+	.ascii	"test"
+	.byte	0	
+	.align	2
+	.word	-1
 	.word	-1
 int_const0:
 	.word	2
 	.word	4
 	.word	Int_dispTab
 	.word	5
+	.word	-1
+int_const1:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	6
+	.word	-1
+int_const2:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	6
+	.word	-1
+int_const3:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	6
+	.word	-1
+int_const4:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	6
+	.word	-1
+int_const5:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	6
+	.word	-1
+int_const6:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	6
 	.word	-1
 bool_const0:
 	.word	3

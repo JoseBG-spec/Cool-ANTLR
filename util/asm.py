@@ -181,11 +181,13 @@ tpl_str_obj= Template(("""
 	.word	-1
 str_const${const_no}:
 	.word	4
-	.word	5
+	.word	8
 	.word	String_dispTab
-	.word	${str_value}
+	.word	int_const8
+	.ascii	${str_value}
 	.byte	0	
-	.align	2"""))
+	.align	2
+	.word	-1"""))
 
 tpl_int_obj= Template(("""
 	.word	-1

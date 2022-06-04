@@ -8,19 +8,18 @@ class GenCode(coolListener):
         self.result = ''
         self.stack = []
         self.labels = 0
-    
-    #! ¿De que se encarga el gencode?
 
     def enterProgram(self, ctx:coolParser.ProgramContext):
         
         self.result += asm.tpl_init_default_classes
+        #Revisar clases creadas por el ususario y su herencia
+        # e inicializarlas
 
 
 
     
     def exitProgram(self, ctx: coolParser.ProgramContext):
         #for c in ctx.getChildren():
-            #! ¿ de donde saco el c.code?
             #self.result += c.code
         self.result += asm.tpl_end
 """ 

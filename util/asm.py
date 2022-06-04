@@ -158,8 +158,6 @@ _MemMgr_TEST:
     .word   0
     .word   -1"""
 
-#MemMgr
-
 tpl_mOne = """
     .word   -1"""
 
@@ -210,3 +208,47 @@ bool_const1:
 	.word	4
 	.word	Bool_dispTab
 	.word	1"""
+
+
+#Object, IO, Int, Sting, bool dispTab 
+tpl_dispTab = """
+class_objTab:
+	.word	Object_protObj 
+	.word	Object_init 
+	.word	IO_protObj 
+	.word	IO_init 
+	.word	Int_protObj 
+	.word	Int_init 
+	.word	Bool_protObj 
+	.word	Bool_init 
+	.word	String_protObj 
+	.word	String_init 
+	.word	Main_protObj 
+	.word	Main_init 
+Object_dispTab:
+	.word	Object.abort
+	.word	Object.type_name
+	.word	Object.copy
+IO_dispTab:
+	.word	Object.abort
+	.word	Object.type_name
+	.word	Object.copy
+	.word	IO.out_string
+	.word	IO.out_int
+	.word	IO.in_string
+	.word	IO.in_int
+Int_dispTab:
+	.word	Object.abort
+	.word	Object.type_name
+	.word	Object.copy
+Bool_dispTab:
+	.word	Object.abort
+	.word	Object.type_name
+	.word	Object.copy
+String_dispTab:
+	.word	Object.abort
+	.word	Object.type_name
+	.word	Object.copy
+	.word	String.length
+	.word	String.concat
+	.word	String.substr"""

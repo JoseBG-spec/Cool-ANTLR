@@ -12,7 +12,11 @@ class GenCode(coolListener):
     #! ¿De que se encarga el gencode?
 
     def enterProgram(self, ctx:coolParser.ProgramContext):
-        self.result += asm.tpl_start_text
+        
+        self.result += asm.tpl_init_default_classes
+
+
+
     
     def exitProgram(self, ctx: coolParser.ProgramContext):
         #for c in ctx.getChildren():

@@ -157,7 +157,18 @@ class_nameTab:
 	.word	Int_cons5
 	.word	Int_cons6
 class_objTab:
-    .word	str_const4
+	.word	Object_protObj
+    .word	Object_init
+	.word	IO_protObj
+    .word	IO_init
+	.word	Int_protObj
+    .word	Int_init
+	.word	String_protObj
+    .word	String_init
+	.word	Boolean_protObj
+    .word	Boolean_init
+	.word	Main_protObj
+    .word	Main_init
 Object_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
@@ -185,11 +196,16 @@ String_dispTab:
 	.word	String.length
 	.word	String.concat
 	.word	String.substr
-obj_protObj:
-	.word	0 
-	.word	3 
-	.word	0 
-	.word	0
+Main_dispTab:	
+    .word	Object.abort
+	.word	Object.type_name
+	.word	Object.copy
+	.word	IO.out_string
+	.word	IO.out_int
+	.word	IO.in_string
+	.word	IO.in_int
+	.word	Main.main
+	.word	-1
 Object_protObj:
 	.word	0 
 	.word	3 
@@ -216,15 +232,15 @@ String_protObj:
 	.word	4 
 	.word	5 
 	.word	String_dispTab 
-	.word	int_const1 
+	.word	str_const3 
 	.word	0 
 	.word	-1 
 Main_protObj:
 	.word	5 
 	.word	5 
 	.word	Main_dispTab 
-	.word	int_const1 
-	.word	str_const10 
+	.word	Int_cons6 
+	.word	str_const5 
 	.globl	heap_start 
 heap_start:
 	.word	0 
@@ -234,9 +250,88 @@ heap_start:
 	.globl	String_init 
 	.globl	Bool_init 
 	.globl	Main.main 
- $$$$$$$$$$$$$$$$$$$$$$$$$$
-    .text
-main: 
-
+Object_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+IO_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+Int_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+Bool_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+String_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+Main_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	IO_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra
     li	    $v0     10                  # 10 para terminar la emulación
     syscall

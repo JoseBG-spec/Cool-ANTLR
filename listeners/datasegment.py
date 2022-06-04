@@ -23,7 +23,8 @@ default_size= {
 
 int_lst= []
 str_lst= ["Object", "IO", "Int", "String", "Boolean"]
-klass_lst= ["Object", "IO", "Int", "String", "Boolean"]
+
+default_klasses=["Object", "IO", "Int", "String", "Boolean"]
 
 klass_W_methods_dic= {
     "Object":   ["POINTER", "abort", "type_name", "copy"], 
@@ -34,6 +35,7 @@ klass_W_methods_dic= {
 }
 
 currentKlass= ""
+currentKlassMethods= []
 
 class DataGenerator(coolListener):
     def __init__(self, dummy):
@@ -175,8 +177,8 @@ class DataGenerator(coolListener):
         print("*int_lst", int_lst)
 
         """class_nameTab"""
-        #! .word por cada nombre de las clases representadas en cool 
-        #!! + los del usuario
+        # .word por cada nombre de las clases representadas en cool 
+        # + los del usuario
         #Agarramos el primer elemento del array de cada key en klass_W_methods_dic
         # el cual es el apuntador a esa clase
         self.result += asm.tlp_class_nametab
@@ -184,36 +186,76 @@ class DataGenerator(coolListener):
             self.result += asm.tlp_word.substitute(
                 value= arr[0],
             )
-
-
         print("klass_W_methods_dic", klass_W_methods_dic)
 
         """class_objTab"""
         #sobre cada clase ponemos los apuntadores su _prot***, **_init
         #iterar sobre la lista de clases
         self.result += asm.tpl_class_objTab
+        for key in klass_W_methods_dic.keys():
+            self.result += asm.tlp_objTab_word.substitute(
+                klass= key,
+            )
 
         """Object_dispTab"""
-        #!Object_dispTab, clases con metodos, incluyendo herencia
+        #Object_dispTab, clases con metodos, incluyendo herencia
         #Fijos
         self.result += asm.tpl_set_dispTab
 
-        #Dinámicos (main)
-        self.result += asm.tpl_dispTab
+        #Dinámicos (main + los del usuario)
+        for key in klass_W_methods_dic.keys():
+            if key in default_klasses:
+                continue
+            else:  
+                self.result += asm.tpl_dynamic_dispTab.substitute(
+                        klass= key,
+                    )
+                ### Checar la herencia (por defult todos heredan de object)
+                self.result += asm.tpl_dispTab_Object
 
-        """Proto Objects"""
-        #!Proto obj (atributos)
+                inher= self.dummy.klassInher[key]
+                ##el string de herencia tiene un - , - 
+                inher= inher.replace(",", "")
+
+                inher_methods= klass_W_methods_dic[inher]
+
+                #print("inher", self.dummy.klassInher)
+                #print("inher_methods", inher_methods)
+
+                #Añadir metodos de herencia
+                #desde el 1 para evitar el apuntador
+                for i in range(1, len(inher_methods)):
+                    self.result += asm.tpl_dynamic_dispTab_word.substitute(
+                            klass= inher,
+                            method= inher_methods[i],
+                        )
+
+                #Añadir metodos propios de la clase
+                #desde el 1 para evitar el apuntador
+                for i in range(1, len(klass_W_methods_dic[key])):
+                    self.result += asm.tpl_dynamic_dispTab_word.substitute(
+                            klass= key,
+                            method= klass_W_methods_dic[key][i],
+                        )
+
+        """Proto Objects (atributos)"""
         ##todos son fijos excepto string
         #Fijos
         self.result += asm.tpl_default_protoObj
 
-        #String
-        self.result += asm.tpl_string_protoObj
+        #!String
+        #Siempre es str_const3 por como el diccionario esta construido inicialmente
+        self.result += asm.tpl_string_protoObj.substitute(
+                pointer= "str_const3",
+            )
 
         """Main_protObj"""
         #!Main_protObj
         #atributos del main
-        self.result += asm.tpl_main_protoObj
+        self.result += asm.tpl_main_protoObj.substitute(
+                int_pointer= klass_W_methods_dic["Main"][0],
+                str_pointer= "str_const5",
+            )
 
         """heap_start - (es fijo)"""
         self.result += asm.tpl_heap_start
@@ -253,17 +295,22 @@ class DataGenerator(coolListener):
         if not currentKlass in str_lst:
             str_lst.append(some_key)
 
+    def exitKlass(self, ctx: coolParser.KlassContext):
+        #print("***currentKlassMethods:", currentKlassMethods) 
+        currentKlass= ctx.TYPE(0).getText()
+        #print("***currentKlass:", currentKlass)
+        #print("***klass_W_methods_dic:", klass_W_methods_dic)
 
-
-        #for keys in self.dummy.klassDic.keys():
-            #if (keys != "Bool") and (keys != "String") and (keys != "Int"):
-                #klass_W_methods_dic[keys] = []
+        for i in range(0, len(currentKlassMethods)):
+            klass_W_methods_dic[currentKlass].append(currentKlassMethods[i])
         
     def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
-        #print("enter method ctx", ctx.expr().getText())
-        #klass_W_methods_dic["Main"].append("method 3"
-        pass
+        #print("***enter method ctx:", ctx.TYPE().getText())
+        #print("***enter method ctx:", ctx.ID().getText())
+
+        #print("***klass ", currentKlass)
+
+        currentKlassMethods.append(ctx.ID().getText())
 
     def exitProgram(self, ctx: coolParser.ProgramContext):
         self.stringLabels()
-        self.result += "\n $$$$$$$$$$$$$$$$$$$$$$$$$$"

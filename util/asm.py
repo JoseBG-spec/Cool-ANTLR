@@ -198,8 +198,12 @@ tlp_word= Template(("""
 
 #class_objTab
 tpl_class_objTab="""
-class_objTab:
-    .word	str_const4"""
+class_objTab:"""
+
+#class_objTab
+tlp_objTab_word= Template(("""
+	.word	${klass}_protObj
+    .word	${klass}_init"""))
 
 #Object, IO, Int, Sting, bool dispTab 
 tpl_set_dispTab = """
@@ -231,12 +235,16 @@ String_dispTab:
 	.word	String.concat
 	.word	String.substr"""
 
-tpl_dispTab = """
-obj_protObj:
-	.word	0 
-	.word	3 
-	.word	0 
-	.word	0"""
+tpl_dispTab_Object ="""	
+    .word	Object.abort
+	.word	Object.type_name
+	.word	Object.copy"""
+
+tpl_dynamic_dispTab =Template(("""
+${klass}_dispTab:"""))
+
+tpl_dynamic_dispTab_word= Template(("""
+	.word	${klass}.${method}"""))
 
 tpl_obj_dispTab = """
 obj_protObj:
@@ -247,6 +255,7 @@ obj_protObj:
 
 #default_protoObj
 tpl_default_protoObj="""
+	.word	-1
 Object_protObj:
 	.word	0 
 	.word	3 
@@ -269,25 +278,25 @@ Bool_protObj:
 	.word	Bool_dispTab 
 	.word	0"""
 
-tpl_string_protoObj="""
+tpl_string_protoObj=Template(("""
 	.word	-1 
 String_protObj:
 	.word	4 
 	.word	5 
 	.word	String_dispTab 
-	.word	int_const1 
-	.word	0 """
+	.word	${pointer} 
+	.word	0 """))
 
 #Main_protoObj
-tpl_main_protoObj="""
+tpl_main_protoObj=Template(("""
 	.word	-1 
 Main_protObj:
 	.word	5 
 	.word	5 
 	.word	Main_dispTab 
-	.word	int_const1 
-	.word	str_const10 
-	.globl	heap_start """
+	.word	${int_pointer} 
+	.word	${str_pointer} 
+	.globl	heap_start """))
 
 #heap_start
 tpl_heap_start = """
@@ -299,3 +308,90 @@ heap_start:
 	.globl	String_init 
 	.globl	Bool_init 
 	.globl	Main.main """
+
+
+#########GENCODE
+tpl_init_default_classes = """
+Object_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+IO_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+Int_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+Bool_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+String_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	Object_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra 
+Main_init:
+	addiu	$sp $sp -12 
+	sw	$fp 12($sp) 
+	sw	$s0 8($sp) 
+	sw	$ra 4($sp) 
+	addiu	$fp $sp 4 
+	move	$s0 $a0 
+	jal	IO_init 
+	move	$a0 $s0 
+	lw	$fp 12($sp) 
+	lw	$s0 8($sp) 
+	lw	$ra 4($sp) 
+	addiu	$sp $sp 12 
+	jr	$ra"""

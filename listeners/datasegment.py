@@ -23,6 +23,7 @@ default_size= {
 
 int_lst= []
 str_lst= ["Object", "IO", "Int", "String", "Boolean"]
+klass_lst= []
 
 klass_W_methods_dic= {}
 
@@ -34,6 +35,9 @@ class DataGenerator(coolListener):
         self.constants = 0
 
         self.dummy= dummy
+
+    #Este método crea el header deafult del .asm
+    # desde ".data" hasta "-MemMgr_TEST"
 
     def defaultLabels(self):
         if self.dummy.klassDic.get('Int') == None:
@@ -101,101 +105,99 @@ class DataGenerator(coolListener):
         #MemMgr
         self.result += asm.tpl_MemMgr
 
+    #Esta funcion genera el resto del segmento de datos
     def stringLabels(self):
-
-        # STR CONST - Create str obj, str type 4
         #! Falta ver lo del int_const8, el tamaño del string en objeto
         #!poner el atributo es entero es un 0,
         #! si el atributo es string es vacio 
         #! si el atributo es un int es 
 
-        #!Int_const0
-            #tipo de dato (4)
-            #tamaño de la clase 
-            #String_dispTab
-            # apuntador al 
-            #!.ascii	STRING
-            #.byte	0	
-            #.align	2
-            #.word	-1
-
+        """str_const - Create string class"""
+        #       .word	-1
+        #str_const#!0
+            #   .word   tipo de dato (4)
+            #   .word   #!tamaño de (esta) clase 
+            #   .word   String_dispTab
+            #   .word   #!apuntador al numero creado
+            #   .ascii	#!STRING
+            #   .byte	0	
+            #   .align	2
+            #   .word   -1
 
         for i in range(0, len(str_lst)):
-            stringLen = len("String")
+
+            #print("String: ", str_lst[i], len(str_lst[i]))
+            stringLen = len(str_lst[i])
+
+            int_lst.append(stringLen)
+            #print("No. Pointer: ", int_lst, len(int_lst)-1)
+
             self.result += asm.tpl_str_obj.substitute(
                 const_no= i,
-                str_value= str_lst[i],
+                pointer= "Int_cons"+str(len(int_lst)-1),
+                str_value= '"'+str_lst[i]+'"',
             )
-            int_lst.append(stringLen)
         
-        # INT CONTS - Create int obj, int type 2
-        
+        """Int_const0 - Create int class"""
+        #       .word	-1
         #!Int_const0
-            #tipo de dato (2)
-            #tamaño de la clase 
-            #Int_dispTab
-            # apuntador al 
-            #!valor del int
+            #   .word   tipo de dato (2)
+            #   .word   tamaño de (esta) clase  
+            #   .word   Int_dispTab
+            #   .word   #!valor del int
 
         for i in range(0, len(int_lst)):
-
             self.result += asm.tpl_int_obj.substitute(
                 int_no= i,
                 int_value= str(int_lst[i]),
             )
 
-        # BOOL CONST - Create bool obj
+        """bool_const0 - Create bool obj"""
         self.result += asm.tpl_bool
 
         print("str_lst", str_lst)
         print("int_lst", int_lst)
 
+        """ """
         #!Class nameTab
-        #str_lst + los del ususario
-        ## .word por cada el nomrbe de la clase representado en cool object, IO, etc...
-        self.result +="""
-class_nameTab:
-    .word	str_const4
-    .word	str_const5
-    .word	str_const6
-    .word	str_const7
-    .word	str_const8
-    .word	str_const9"""
+        #klass_lst + los del usuario
+        # .word por cada nombre de la clase representado en cool 
+        # object, IO, etc...
+        self.result += asm.tlp_class_nametab
 
         print("klass_W_methods_dic", klass_W_methods_dic)
 
 
-        
-        #!class_dispTab
+        """class_objTab"""
         #sobre cada clase ponemos los apuntadores su _prot***, **_init
         #iterar sobre la lista de clases
+        self.result += asm.tpl_class_objTab
+
+        """Object_dispTab"""
+        #!Object_dispTab, clases con metodos, incluyendo herencia
+        #Fijos
+        self.result += asm.tpl_set_dispTab
+
+        #Dinámicos (main)
         self.result += asm.tpl_dispTab
 
-        #!Object_dispTab, metodos incluyendo herencia
-
-
-        #self.result += asm.tpl_mOne
-        
-        #for name in classesDict.keys():
-        #for name in self.dummy.klassDic.keys():
-        #    self.addStringConst(name)
-            #byte = len(name)
-
-            #print("Byte: ", byte, name)
-
-            #if byte not in self.registered_ints:
-                #self.addIntConst(byte)
-
-
+        """Proto Objects"""
         #!Proto obj (atributos)
-        #todos son fijos hasta string
+        ##todos son fijos excepto string
+        #Fijos
+        self.result += asm.tpl_default_protoObj
 
+        #String
+        self.result += asm.tpl_string_protoObj
 
+        """Main_protObj"""
         #!Main_protObj
         #atributos del main
+        self.result += asm.tpl_main_protoObj
 
-        #!heap_start es fijo
 
+        """heap_start - (es fijo)"""
+        self.result += asm.tpl_heap_start
 
 
     def enterProgram(self, ctx: coolParser.ProgramContext):

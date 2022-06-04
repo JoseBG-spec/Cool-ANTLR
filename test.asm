@@ -31,61 +31,55 @@ str_const0:
 	.word	4
 	.word	8
 	.word	String_dispTab
-	.word	int_const8
-	.ascii	Object
+	.word	Int_cons1
+	.ascii	"Object"
 	.byte	0	
 	.align	2
-	.word	-1
 	.word	-1
 str_const1:
 	.word	4
 	.word	8
 	.word	String_dispTab
-	.word	int_const8
-	.ascii	IO
+	.word	Int_cons2
+	.ascii	"IO"
 	.byte	0	
 	.align	2
-	.word	-1
 	.word	-1
 str_const2:
 	.word	4
 	.word	8
 	.word	String_dispTab
-	.word	int_const8
-	.ascii	Int
+	.word	Int_cons3
+	.ascii	"Int"
 	.byte	0	
 	.align	2
-	.word	-1
 	.word	-1
 str_const3:
 	.word	4
 	.word	8
 	.word	String_dispTab
-	.word	int_const8
-	.ascii	String
+	.word	Int_cons4
+	.ascii	"String"
 	.byte	0	
 	.align	2
-	.word	-1
 	.word	-1
 str_const4:
 	.word	4
 	.word	8
 	.word	String_dispTab
-	.word	int_const8
-	.ascii	Boolean
+	.word	Int_cons5
+	.ascii	"Boolean"
 	.byte	0	
 	.align	2
-	.word	-1
 	.word	-1
 str_const5:
 	.word	4
 	.word	8
 	.word	String_dispTab
-	.word	int_const8
-	.ascii	"test"
+	.word	Int_cons6
+	.ascii	""test""
 	.byte	0	
 	.align	2
-	.word	-1
 	.word	-1
 int_const0:
 	.word	2
@@ -103,13 +97,13 @@ int_const2:
 	.word	2
 	.word	4
 	.word	Int_dispTab
-	.word	6
+	.word	2
 	.word	-1
 int_const3:
 	.word	2
 	.word	4
 	.word	Int_dispTab
-	.word	6
+	.word	3
 	.word	-1
 int_const4:
 	.word	2
@@ -121,7 +115,7 @@ int_const5:
 	.word	2
 	.word	4
 	.word	Int_dispTab
-	.word	6
+	.word	7
 	.word	-1
 int_const6:
 	.word	2
@@ -148,18 +142,7 @@ class_nameTab:
     .word	str_const8
     .word	str_const9
 class_objTab:
-	.word	Object_protObj 
-	.word	Object_init 
-	.word	IO_protObj 
-	.word	IO_init 
-	.word	Int_protObj 
-	.word	Int_init 
-	.word	Bool_protObj 
-	.word	Bool_init 
-	.word	String_protObj 
-	.word	String_init 
-	.word	Main_protObj 
-	.word	Main_init 
+    .word	str_const4
 Object_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
@@ -187,6 +170,55 @@ String_dispTab:
 	.word	String.length
 	.word	String.concat
 	.word	String.substr
+obj_protObj:
+	.word	0 
+	.word	3 
+	.word	0 
+	.word	0
+Object_protObj:
+	.word	0 
+	.word	3 
+	.word	Object_dispTab 
+	.word	-1 
+IO_protObj:
+	.word	1 
+	.word	3 
+	.word	IO_dispTab 
+	.word	-1 
+Int_protObj:
+	.word	2 
+	.word	4 
+	.word	Int_dispTab 
+	.word	0 
+	.word	-1 
+Bool_protObj:
+	.word	3 
+	.word	4 
+	.word	Bool_dispTab 
+	.word	0
+	.word	-1 
+String_protObj:
+	.word	4 
+	.word	5 
+	.word	String_dispTab 
+	.word	int_const1 
+	.word	0 
+	.word	-1 
+Main_protObj:
+	.word	5 
+	.word	5 
+	.word	Main_dispTab 
+	.word	int_const1 
+	.word	str_const10 
+	.globl	heap_start 
+heap_start:
+	.word	0 
+	.text	 
+	.globl	Main_init 
+	.globl	Int_init 
+	.globl	String_init 
+	.globl	Bool_init 
+	.globl	Main.main 
  $$$$$$$$$$$$$$$$$$$$$$$$$$
     .text
 main: 

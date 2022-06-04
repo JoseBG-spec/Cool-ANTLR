@@ -23,9 +23,15 @@ default_size= {
 
 int_lst= []
 str_lst= ["Object", "IO", "Int", "String", "Boolean"]
-klass_lst= []
+klass_lst= ["Object", "IO", "Int", "String", "Boolean"]
 
-klass_W_methods_dic= {}
+klass_W_methods_dic= {
+    "Object":   ["POINTER", "abort", "type_name", "copy"], 
+    "IO":       ["POINTER","out_string", "out_int", "in_string", "in_int"],  
+    "Int":      ["POINTER"],  
+    "String":   ["POINTER","length", "concat", "substr"],
+    "Boolean":  ["POINTER"]
+}
 
 currentKlass= ""
 
@@ -37,8 +43,7 @@ class DataGenerator(coolListener):
         self.dummy= dummy
 
     #Este método crea el header deafult del .asm
-    # desde ".data" hasta "-MemMgr_TEST"
-
+    #desde ".data" hasta "-MemMgr_TEST"
     def defaultLabels(self):
         if self.dummy.klassDic.get('Int') == None:
             self.dummy.klassDic["Int"] = ""
@@ -61,7 +66,7 @@ class DataGenerator(coolListener):
                 )
             )
 
-        print("¿ proto_tags: ", prototype_tags)
+        #print("¿ proto_tags: ", prototype_tags)
 
         #Class tags
         class_tags= ""
@@ -72,7 +77,7 @@ class DataGenerator(coolListener):
                 )
             )
 
-        print("¿ class_tags: ", class_tags)
+        #print("¿ class_tags: ", class_tags)
 
 
         class_tags_id= ""
@@ -93,8 +98,7 @@ class DataGenerator(coolListener):
             )
 
         #Class tags ID
-        print("¿ class_tags_IDs: ", class_tags_id)
-
+        #print("¿ class_tags_IDs: ", class_tags_id)
         self.result += asm.tpl_global_tags_start.substitute(
             prototype_tags= prototype_tags,
             class_tags = class_tags
@@ -125,17 +129,29 @@ class DataGenerator(coolListener):
             #   .word   -1
 
         for i in range(0, len(str_lst)):
-
             #print("String: ", str_lst[i], len(str_lst[i]))
             stringLen = len(str_lst[i])
+            pointer= "Int_cons"+str(len(int_lst))
 
             int_lst.append(stringLen)
             #print("No. Pointer: ", int_lst, len(int_lst)-1)
 
+            #ADD    pointer as the FIRST ELEMENT of array 
+            #       on the klass_W_methods_dic
+            some_key = str_lst[i]
+            if some_key in klass_W_methods_dic.keys():
+                #print("Key: ",                some_key)
+                #print("-klass method arr",   klass_W_methods_dic[some_key])
+
+                klass_W_methods_dic[some_key][0] = pointer
+                #print("--pointer",            klass_W_methods_dic[some_key][0])
+            else:
+                print("-key "+some_key+" doesn\'t exist")
+
             self.result += asm.tpl_str_obj.substitute(
                 const_no= i,
-                pointer= "Int_cons"+str(len(int_lst)-1),
-                str_value= '"'+str_lst[i]+'"',
+                pointer= pointer,
+                str_value= str_lst[i],
             )
         
         """Int_const0 - Create int class"""
@@ -149,24 +165,28 @@ class DataGenerator(coolListener):
         for i in range(0, len(int_lst)):
             self.result += asm.tpl_int_obj.substitute(
                 int_no= i,
-                int_value= str(int_lst[i]),
+                int_value= int_lst[i],
             )
 
         """bool_const0 - Create bool obj"""
         self.result += asm.tpl_bool
 
-        print("str_lst", str_lst)
-        print("int_lst", int_lst)
+        print("*str_lst", str_lst)
+        print("*int_lst", int_lst)
 
-        """ """
-        #!Class nameTab
-        #klass_lst + los del usuario
-        # .word por cada nombre de la clase representado en cool 
-        # object, IO, etc...
+        """class_nameTab"""
+        #! .word por cada nombre de las clases representadas en cool 
+        #!! + los del usuario
+        #Agarramos el primer elemento del array de cada key en klass_W_methods_dic
+        # el cual es el apuntador a esa clase
         self.result += asm.tlp_class_nametab
+        for arr in klass_W_methods_dic.values():
+            self.result += asm.tlp_word.substitute(
+                value= arr[0],
+            )
+
 
         print("klass_W_methods_dic", klass_W_methods_dic)
-
 
         """class_objTab"""
         #sobre cada clase ponemos los apuntadores su _prot***, **_init
@@ -195,10 +215,8 @@ class DataGenerator(coolListener):
         #atributos del main
         self.result += asm.tpl_main_protoObj
 
-
         """heap_start - (es fijo)"""
         self.result += asm.tpl_heap_start
-
 
     def enterProgram(self, ctx: coolParser.ProgramContext):
 
@@ -207,59 +225,45 @@ class DataGenerator(coolListener):
         self.defaultLabels()
 
     def enterPrimary(self, ctx: coolParser.PrimaryContext):
-        print("ctx", ctx.getText())
+        #print("ctx", ctx.getText())
 
         if ctx.ID() != None:
             print("beunas")
         elif ctx.STRING() != None:
-            str_lst.append(ctx.STRING().getText())
+            str_lst.append(str(ctx.STRING().getText()))
         elif ctx.INTEGER() != None:
             int_lst.append(ctx.INTEGER().getText())
-
             
     def enterKlass(self, ctx: coolParser.KlassContext):
-        print("enter klass ctx", ctx.getText())
-
+        #print("enter klass ctx", ctx.getText())
         
-        for i in ctx.TYPE():
-            print("kLASS", i.getText())
+        #for i in ctx.TYPE():
+            #print("kLASS", i.getText())
 
         currentKlass= ctx.TYPE(0).getText()
-        print("CURRENT klass:::", currentKlass)
+        #print("CURRENT klass:::", currentKlass)
+        #ADD classes to the klass_W_methods_dic
+        some_key = currentKlass
+        if some_key in klass_W_methods_dic.keys():
+            print("key "+some_key+" already exist")
+        else:
+            #added value to the methods dic
+            klass_W_methods_dic[some_key]= ["POINTER"]
 
-        for keys in self.dummy.klassDic.keys():
-            if (keys != "Bool") and (keys != "String") and (keys != "Int"):
-                klass_W_methods_dic[keys] = []
+        if not currentKlass in str_lst:
+            str_lst.append(some_key)
+
+
+
+        #for keys in self.dummy.klassDic.keys():
+            #if (keys != "Bool") and (keys != "String") and (keys != "Int"):
+                #klass_W_methods_dic[keys] = []
         
     def enterMethodDecl(self, ctx: coolParser.MethodDeclContext):
-        print("enter method ctx", ctx.expr().getText())
-
-        klass_W_methods_dic["Main"].append("method 3")
-
-        #klass_W_methods_dic["klass_name"].append("method 4")
-    def enterExp(self, ctx: coolParser.ExpContext):
-        #for i in ctx.expr():
-        #    print(i.getText())
+        #print("enter method ctx", ctx.expr().getText())
+        #klass_W_methods_dic["Main"].append("method 3"
         pass
-
-    def enterExpr(self, ctx: coolParser.ExprContext):
-        print("enter exp ctx", ctx.getText())
 
     def exitProgram(self, ctx: coolParser.ProgramContext):
         self.stringLabels()
         self.result += "\n $$$$$$$$$$$$$$$$$$$$$$$$$$"
-
-"""
-    def enterDeclaracion(self, ctx: coolParser.DeclaracionContext):
-        self.result += asm.tpl_var_decl.substitute(
-            varname = ctx.getChild(1).getText()
-        )
-        ctx.code = ''
-
-    def enterPrimaria_string(self, ctx: coolParser.Primaria_stringContext):
-        self.constants = self.constants + 1
-        ctx.label = "var{}".format(self.constants)
-        self.result += asm.tpl_string_const_decl.substitute(
-            name = ctx.label, content = ctx.getText()
-        )
- """

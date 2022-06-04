@@ -32,7 +32,7 @@ str_const0:
 	.word	8
 	.word	String_dispTab
 	.word	Int_cons1
-	.ascii	"Object"
+	.ascii	Object
 	.byte	0	
 	.align	2
 	.word	-1
@@ -41,7 +41,7 @@ str_const1:
 	.word	8
 	.word	String_dispTab
 	.word	Int_cons2
-	.ascii	"IO"
+	.ascii	IO
 	.byte	0	
 	.align	2
 	.word	-1
@@ -50,7 +50,7 @@ str_const2:
 	.word	8
 	.word	String_dispTab
 	.word	Int_cons3
-	.ascii	"Int"
+	.ascii	Int
 	.byte	0	
 	.align	2
 	.word	-1
@@ -59,7 +59,7 @@ str_const3:
 	.word	8
 	.word	String_dispTab
 	.word	Int_cons4
-	.ascii	"String"
+	.ascii	String
 	.byte	0	
 	.align	2
 	.word	-1
@@ -68,7 +68,7 @@ str_const4:
 	.word	8
 	.word	String_dispTab
 	.word	Int_cons5
-	.ascii	"Boolean"
+	.ascii	Boolean
 	.byte	0	
 	.align	2
 	.word	-1
@@ -77,7 +77,16 @@ str_const5:
 	.word	8
 	.word	String_dispTab
 	.word	Int_cons6
-	.ascii	""test""
+	.ascii	Main
+	.byte	0	
+	.align	2
+	.word	-1
+str_const6:
+	.word	4
+	.word	8
+	.word	String_dispTab
+	.word	Int_cons7
+	.ascii	"test"
 	.byte	0	
 	.align	2
 	.word	-1
@@ -121,6 +130,12 @@ int_const6:
 	.word	2
 	.word	4
 	.word	Int_dispTab
+	.word	4
+	.word	-1
+int_const7:
+	.word	2
+	.word	4
+	.word	Int_dispTab
 	.word	6
 	.word	-1
 bool_const0:
@@ -135,12 +150,12 @@ bool_const1:
 	.word	Bool_dispTab
 	.word	1
 class_nameTab:
-    .word	str_const4
-    .word	str_const5
-    .word	str_const6
-    .word	str_const7
-    .word	str_const8
-    .word	str_const9
+	.word	Int_cons1
+	.word	Int_cons2
+	.word	Int_cons3
+	.word	Int_cons4
+	.word	Int_cons5
+	.word	Int_cons6
 class_objTab:
     .word	str_const4
 Object_dispTab:

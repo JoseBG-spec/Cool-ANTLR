@@ -39,12 +39,12 @@ def compile(file):
                         ltwo.tempFormalID
     ) 
     walker.walk(dummy, tree)
-    print("########################################")
-    print("Listener Dummy")
-    print(dummy.printObj())
+    #print("########################################")
+    #print("Listener Dummy")
+    #print(dummy.printObj())
 
-    print("########################################")
-    print("tree printer")
+    #print("########################################")
+    #print("tree printer")
     walker.walk(TreePrinter(), tree)
 
     print("########################################")

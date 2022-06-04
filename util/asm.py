@@ -191,13 +191,10 @@ int_const${int_no}:
 
 #class_nametab
 tlp_class_nametab="""
-class_nameTab:
-    .word	str_const4
-    .word	str_const5
-    .word	str_const6
-    .word	str_const7
-    .word	str_const8
-    .word	str_const9"""
+class_nameTab:"""
+
+tlp_word= Template(("""
+	.word	${value}"""))
 
 #class_objTab
 tpl_class_objTab="""

@@ -170,6 +170,17 @@ bool_const1:
 	.word	Bool_dispTab
 	.word	1"""
 
+tpl_string_empty=Template(("""
+	.word	-1 
+str_const${str_no}:
+	.word	4
+	.word	5
+	.word	String_dispTab
+	.word	${pointer}
+	.byte	0	
+	.align	2"""))
+
+
 tpl_str_obj= Template(("""
 	.word	-1
 str_const${const_no}:
@@ -177,15 +188,23 @@ str_const${const_no}:
 	.word	8
 	.word	String_dispTab
 	.word	${pointer}
-	.ascii	${str_value}
+	.ascii	"${str_value}"
 	.byte	0	
 	.align	2"""))
+
+tpl_int_empty= Template(("""
+	.word	-1
+int_const${int_no}:
+	.word	2
+	.word	4
+	.word	Int_dispTab
+	.word	0"""))
 
 tpl_int_obj= Template(("""
 	.word	-1
 int_const${int_no}:
 	.word	2
-	.word	4
+	.word	${val}
 	.word	Int_dispTab
 	.word	${int_value}"""))
 
@@ -286,7 +305,7 @@ String_protObj:
 	.word	String_dispTab 
 	.word	${pointer} 
 	.word	0 """))
-
+	
 #Main_protoObj
 tpl_main_protoObj=Template(("""
 	.word	-1 

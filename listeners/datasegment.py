@@ -114,6 +114,7 @@ class DataGenerator(coolListener):
     #Esta funcion genera el resto del segmento de datos
     def stringLabels(self):
         #! Falta ver lo del int_const8, el tamaño del string en objeto
+        
         #!poner el atributo es entero es un 0,
         #! si el atributo es string es vacio 
         #! si el atributo es un int es 
@@ -132,6 +133,7 @@ class DataGenerator(coolListener):
 
         for i in range(0, len(str_lst)):
             #print("String: ", str_lst[i], len(str_lst[i]))
+
             stringLen = len(str_lst[i])
             pointer= "Int_cons"+str(len(int_lst))
 
@@ -155,7 +157,14 @@ class DataGenerator(coolListener):
                 pointer= pointer,
                 str_value= str_lst[i],
             )
-        
+
+        #Int tamaño cero
+        self.result += asm.tpl_string_empty.substitute(
+                str_no= str(len(str_lst)+1),
+                pointer= "int_const"+str(len(int_lst)+1),
+            )
+
+
         """Int_const0 - Create int class"""
         #       .word	-1
         #!Int_const0
@@ -164,9 +173,23 @@ class DataGenerator(coolListener):
             #   .word   Int_dispTab
             #   .word   #!valor del int
 
+            
+            #! se redonde al asiguiente multplo de 4
+            #logitud dle objeto string
+            # se divide entre 4 para que me o de en words
+            #y le sumo 3
+
+            #multiple * (number / multiple)
+
+        #Int tamaño cero
+        self.result += asm.tpl_int_empty.substitute(
+                int_no= str(len(int_lst)+1),
+            )
+
         for i in range(0, len(int_lst)):
             self.result += asm.tpl_int_obj.substitute(
                 int_no= i,
+                val= round(  (  ( 4*( int(int_lst[i]) / 4) ) / 4  ) + 3 ),
                 int_value= int_lst[i],
             )
 
@@ -181,6 +204,8 @@ class DataGenerator(coolListener):
         # + los del usuario
         #Agarramos el primer elemento del array de cada key en klass_W_methods_dic
         # el cual es el apuntador a esa clase
+
+        #!USAR EL TEMPLATE DE STRING
         self.result += asm.tlp_class_nametab
         for arr in klass_W_methods_dic.values():
             self.result += asm.tlp_word.substitute(
@@ -244,17 +269,19 @@ class DataGenerator(coolListener):
         self.result += asm.tpl_default_protoObj
 
         #!String
-        #Siempre es str_const3 por como el diccionario esta construido inicialmente
+        #!int con tamaño cero y ese es el pauntador de aca
         self.result += asm.tpl_string_protoObj.substitute(
-                pointer= "str_const3",
+                pointer= "int_const"+str(len(int_lst)+1),
             )
 
         """Main_protObj"""
         #!Main_protObj
+        #! INT - int con tamaño cero y ese es el pauntador de aca
+        #! STRING VACIO - int con tamaño cero y ese es el pauntador de aca
         #atributos del main
         self.result += asm.tpl_main_protoObj.substitute(
-                int_pointer= klass_W_methods_dic["Main"][0],
-                str_pointer= "str_const5",
+                int_pointer= "int_const"+str(len(int_lst)+1),
+                str_pointer= "str_const"+str(len(str_lst)+1),
             )
 
         """heap_start - (es fijo)"""
@@ -272,7 +299,7 @@ class DataGenerator(coolListener):
         if ctx.ID() != None:
             print("beunas")
         elif ctx.STRING() != None:
-            str_lst.append(str(ctx.STRING().getText()))
+            str_lst.append(str(ctx.STRING().getText())[1:-1])
         elif ctx.INTEGER() != None:
             int_lst.append(ctx.INTEGER().getText())
             

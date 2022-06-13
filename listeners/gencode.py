@@ -15,6 +15,14 @@ class GenCode(coolListener):
         #Revisar clases creadas por el ususario y su herencia
         # e inicializarlas
 
+        #! metodos de main
+        #!cada metodos, protocolo statico entrada salida
+
+
+        #enter primeru
+        #
+
+
 
 
     
